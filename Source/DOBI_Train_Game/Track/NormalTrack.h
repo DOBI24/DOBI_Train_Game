@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Track/Track.h"
+#include "Track.h"
 #include "NormalTrack.generated.h"
 
 /**
