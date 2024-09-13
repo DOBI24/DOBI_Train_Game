@@ -14,4 +14,8 @@ class DOBI_TRAIN_GAME_API UTunnelTrack : public UTrack
 {
 	GENERATED_BODY()
 	
+public:
+	UTunnelTrack();
+
+	UTunnelTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType);
 };

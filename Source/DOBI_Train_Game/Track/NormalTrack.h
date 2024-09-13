@@ -14,4 +14,8 @@ class DOBI_TRAIN_GAME_API UNormalTrack : public UTrack
 {
 	GENERATED_BODY()
 	
+public:
+	UNormalTrack();
+
+	UNormalTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType);
 };
