@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "DOBI_Train_Game/Track/Track.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseField.generated.h"
@@ -23,4 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
+	UTrack* parent;
+
+	UPROPERTY(EditAnywhere)
+	ETrack_Route TrackRouteEnum;
 };

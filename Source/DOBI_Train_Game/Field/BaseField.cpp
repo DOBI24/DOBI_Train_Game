@@ -15,7 +15,7 @@ ABaseField::ABaseField()
 void ABaseField::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	parent->AddFieldToFields(this);
 }
 
 // Called every frame
