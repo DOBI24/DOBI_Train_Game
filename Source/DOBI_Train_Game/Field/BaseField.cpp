@@ -2,6 +2,7 @@
 
 
 #include "BaseField.h"
+#include "../GameMode/TrainGameMode.h"
 
 // Sets default values
 ABaseField::ABaseField()
@@ -15,7 +16,16 @@ ABaseField::ABaseField()
 void ABaseField::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ATrainGameMode* GameMode= (ATrainGameMode*)(GetWorld()->GetAuthGameMode());
+	parent = GameMode->AllTrack[(uint8)(TrackRouteEnum)];
+	if (!parent){
+		UE_LOG(LogTemp, Error, TEXT("Failed to find parent track for field %s"), *GetName());
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Found parent track for field %d"), parent->TrackColor);
 	parent->AddFieldToFields(this);
+
 }
 
 // Called every frame
