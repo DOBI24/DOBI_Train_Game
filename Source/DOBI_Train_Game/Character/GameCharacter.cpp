@@ -1,7 +1,7 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "Character/GameCharacter.h"
+#include "GameCharacter.h"
 
 // Sets default values
 AGameCharacter::AGameCharacter()
