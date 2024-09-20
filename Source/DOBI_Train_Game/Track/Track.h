@@ -136,6 +136,7 @@ enum class ETrack_Type : uint8
 
 
 class ABaseField;
+
 UCLASS()
 class DOBI_TRAIN_GAME_API UTrack : public UObject
 {
