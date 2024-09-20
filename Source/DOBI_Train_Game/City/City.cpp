@@ -15,7 +15,6 @@ ACity::ACity()
 void ACity::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -24,4 +23,3 @@ void ACity::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
