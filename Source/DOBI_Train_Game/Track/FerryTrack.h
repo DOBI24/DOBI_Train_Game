@@ -17,8 +17,6 @@ class DOBI_TRAIN_GAME_API UFerryTrack : public UTrack
 public:
 	UFerryTrack();
 
-	UFerryTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType, const int32& FerryCount);
-
 	UPROPERTY()
 	int32 FerryCount;
 };

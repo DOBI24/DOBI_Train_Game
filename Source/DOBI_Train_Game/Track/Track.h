@@ -144,7 +144,7 @@ class DOBI_TRAIN_GAME_API UTrack : public UObject
 	
 public:
 	UTrack();
-	UTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType);
+	bool IsNameStableForNetworking() const override;
 
 	UPROPERTY()
 	ETrack_Color TrackColor;
@@ -152,11 +152,15 @@ public:
 	UPROPERTY()
 	ETrack_Type TrackType;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 FieldCount;
 
+	UPROPERTY()
 	TArray<ABaseField*> Fields;
 
 	UFUNCTION()
 	void AddFieldToFields(ABaseField* field);
+
+	UFUNCTION(BlueprintPure)
+	int32 GetFieldCount();
 };

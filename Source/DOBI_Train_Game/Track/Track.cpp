@@ -7,8 +7,9 @@ UTrack::UTrack() : FieldCount(0)
 {
 }
 
-UTrack::UTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType) : FieldCount(0), TrackColor(TrackColor), TrackType(TrackType)
+bool UTrack::IsNameStableForNetworking() const
 {
+	return true;
 }
 
 void UTrack::AddFieldToFields(ABaseField* field)
@@ -16,4 +17,9 @@ void UTrack::AddFieldToFields(ABaseField* field)
 	Fields.Emplace(field);
 	FieldCount++;
 	UE_LOG(LogAudio, Warning, TEXT("Adding successfully %d"), Fields.Num());
+}
+
+int32 UTrack::GetFieldCount()
+{
+	return FieldCount;
 }

@@ -16,6 +16,4 @@ class DOBI_TRAIN_GAME_API UNormalTrack : public UTrack
 	
 public:
 	UNormalTrack();
-
-	UNormalTrack(const ETrack_Color& TrackColor, const ETrack_Type& TrackType);
 };
