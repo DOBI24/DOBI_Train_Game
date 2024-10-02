@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "../Track/Track.h"
 #include "CoreMinimal.h"
+#include "../Card/Card.h"
+#include "../Track/Track.h"
 #include "Containers/Array.h"
 #include "GameFramework/GameModeBase.h"
 #include "TrainGameMode.generated.h"
@@ -26,11 +27,14 @@ UCLASS()
 class DOBI_TRAIN_GAME_API ATrainGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	ATrainGameMode();
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TArray<UTrack*> AllTrack;
 
 	UFUNCTION()
@@ -38,4 +42,7 @@ public:
 
 	UFUNCTION()
 	TArray<FArray2D> ImportTrackData();
+
+	UFUNCTION()
+	void CreateCards();
 };
