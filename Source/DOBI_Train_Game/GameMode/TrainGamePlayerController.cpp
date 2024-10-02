@@ -1,5 +1,16 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "GameMode/TrainGamePlayerController.h"
+#include "TrainGamePlayerController.h"
+#include "Engine/Engine.h"
 
+ATrainGamePlayerController::ATrainGamePlayerController()
+{
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+}
+
+void ATrainGamePlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+}

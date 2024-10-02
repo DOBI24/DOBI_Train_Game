@@ -14,4 +14,9 @@ class DOBI_TRAIN_GAME_API ATrainGamePlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	ATrainGamePlayerController();
+
+protected:
+	virtual void BeginPlay() override;
 };
