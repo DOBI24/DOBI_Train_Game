@@ -25,3 +25,31 @@ void ACard::Tick(float DeltaTime)
 
 }
 
+bool ACard::CreateCardStaticMesh()
+{
+	switch (Color)
+	{
+	case ECard_Color::PINK:
+		break;
+	case ECard_Color::WHITE:
+		break;
+	case ECard_Color::BLUE:
+		break;
+	case ECard_Color::YELLOW:
+		break;
+	case ECard_Color::ORANGE:
+		break;
+	case ECard_Color::BLACK:
+		break;
+	case ECard_Color::RED:
+		break;
+	case ECard_Color::GREEN:
+		break;
+	case ECard_Color::LOCOMOTIVE:
+		break;
+	default:
+		break;
+	}
+	return false;
+}
+
