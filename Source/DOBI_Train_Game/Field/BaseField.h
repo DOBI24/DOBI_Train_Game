@@ -24,9 +24,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY()
-	UTrack* parent;
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	UTrack* Parent;
 
 	UPROPERTY(EditAnywhere)
 	ETrack_Route TrackRouteEnum;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	void InitializeParent();
 };
