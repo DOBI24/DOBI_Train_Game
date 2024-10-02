@@ -14,4 +14,6 @@ class DOBI_TRAIN_GAME_API ATrainGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+public:
+	ATrainGameState();
 };

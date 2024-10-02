@@ -1,5 +1,8 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "GameMode/TrainGameState.h"
+#include "TrainGameState.h"
 
+ATrainGameState::ATrainGameState()
+{
+}
