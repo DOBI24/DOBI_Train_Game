@@ -1,5 +1,10 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "MainMenu/GameMode/MainMenuPlayerController.h"
+#include "MainMenuPlayerController.h"
 
+AMainMenuPlayerController::AMainMenuPlayerController()
+{
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+}

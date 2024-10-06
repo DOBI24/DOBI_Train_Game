@@ -14,4 +14,6 @@ class DOBI_TRAIN_GAME_API AMainMenuPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+public:
+	AMainMenuPlayerController();
 };
