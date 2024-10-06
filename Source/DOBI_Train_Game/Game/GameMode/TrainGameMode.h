@@ -34,15 +34,6 @@ protected:
 public:
 	ATrainGameMode();
 
-	UPROPERTY(BlueprintReadWrite)
-	TArray<UTrack*> AllTrack;
-
-	UFUNCTION()
-	void CreateTrackByEnum();
-
-	UFUNCTION()
-	TArray<FArray2D> ImportTrackData();
-
 	UFUNCTION()
 	void CreateCards();
 };
