@@ -2,9 +2,6 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
-#include "Track.generated.h"
 
 UENUM()
 enum class ETrack_Route : uint8
@@ -132,35 +129,4 @@ enum class ETrack_Type : uint8
 	NORMAL,
 	TUNNEL,
 	FERRY
-};
-
-
-class ABaseField;
-
-UCLASS()
-class DOBI_TRAIN_GAME_API UTrack : public UObject
-{
-	GENERATED_BODY()
-	
-public:
-	UTrack();
-	bool IsNameStableForNetworking() const override;
-
-	UPROPERTY()
-	ETrack_Color TrackColor;
-
-	UPROPERTY()
-	ETrack_Type TrackType;
-	
-	UPROPERTY(BlueprintReadOnly)
-	int32 FieldCount;
-
-	UPROPERTY()
-	TArray<ABaseField*> Fields;
-
-	UFUNCTION()
-	void AddFieldToFields(ABaseField* field);
-
-	UFUNCTION(BlueprintPure)
-	int32 GetFieldCount();
 };
