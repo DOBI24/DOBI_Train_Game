@@ -15,17 +15,18 @@ ABaseField::ABaseField()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	bAlwaysRelevant = true;
+
+	Parent = nullptr;
 }
 
 // Called when the game starts or when spawned
 void ABaseField::BeginPlay()
 {
 	Super::BeginPlay();
+	if (!Parent) {
+		UE_LOG(LogTemp, Warning, TEXT("Field has no parent"));
+	}
 	SetOwner(GetWorld()->GetFirstPlayerController());
-
-	// InitializeParent will be called on the server;
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABaseField::InitializeParent, 1.0f, false);
 }
 
 // Called every frame
@@ -44,11 +45,5 @@ void ABaseField::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 void ABaseField::InitializeParent()
 {
-	if (GetLocalRole() == ROLE_Authority) {
-		ATrainGameMode* GameMode = Cast<ATrainGameMode>(GetWorld()->GetAuthGameMode());
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("GameMode: %d"), GameMode->AllTrack.Num()));
-
-		Parent = GameMode->AllTrack[(uint8)(TrackRouteEnum)];
-		Parent->AddFieldToFields(this);
-	}
+	Parent->AddFieldToFields(this);
 }

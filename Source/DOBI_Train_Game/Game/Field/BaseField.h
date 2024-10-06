@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Track/Track.h"
+#include "../Track/BaseTrack.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseField.generated.h"
@@ -24,11 +25,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(Replicated, BlueprintReadOnly)
-	UTrack* Parent;
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
+	ABaseTrack* Parent;
 
-	UPROPERTY(EditAnywhere)
-	ETrack_Route TrackRouteEnum;
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION()
