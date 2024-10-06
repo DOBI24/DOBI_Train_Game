@@ -2,8 +2,6 @@
 
 
 #include "BaseField.h"
-#include "../GameMode/TrainGameMode.h"
-#include "../GameMode/TrainGameState.h"
 #include "../GameMode/TrainGamePlayerController.h"
 #include "Engine/Engine.h"
 #include "Net/UnrealNetwork.h"

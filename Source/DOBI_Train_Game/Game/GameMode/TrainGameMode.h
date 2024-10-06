@@ -14,4 +14,6 @@ class DOBI_TRAIN_GAME_API ATrainGameMode : public AGameMode
 {
 	GENERATED_BODY()
 	
+public:
+	ATrainGameMode();
 };
