@@ -1,14 +1,5 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "TrainGameState.h"
-#include "TrainGameMode.h"
+#include "Game/GameMode/TrainGameState.h"
 
-void ATrainGameState::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-ATrainGameState::ATrainGameState()
-{
-}
