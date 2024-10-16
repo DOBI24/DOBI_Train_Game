@@ -14,4 +14,6 @@ class DOBI_TRAIN_GAME_API ALobbyGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	ALobbyGameMode();
 };

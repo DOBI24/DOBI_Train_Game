@@ -1,5 +1,15 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "Lobby/GameMode/LobbyPlayerState.h"
+#include "LobbyPlayerState.h"
 
+ALobbyPlayerState::ALobbyPlayerState()
+{
+	bReplicates = true;
+	bAlwaysRelevant = true;
+}
+
+void ALobbyPlayerState::SetPN(FString Name)
+{
+	SetPlayerName(Name);
+}

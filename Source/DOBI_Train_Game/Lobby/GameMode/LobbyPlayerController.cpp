@@ -1,5 +1,10 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "Lobby/GameMode/LobbyPlayerController.h"
+#include "LobbyPlayerController.h"
 
+ALobbyPlayerController::ALobbyPlayerController()
+{
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+}

@@ -14,4 +14,9 @@ class DOBI_TRAIN_GAME_API ALobbyPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
+public:
+	ALobbyPlayerState();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPN(FString Name);
 };
