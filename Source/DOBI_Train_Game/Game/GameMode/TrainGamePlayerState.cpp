@@ -1,5 +1,31 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "Game/GameMode/TrainGamePlayerState.h"
+#include "TrainGamePlayerState.h"
+#include "Net/UnrealNetwork.h"
 
+ATrainGamePlayerState::ATrainGamePlayerState()
+{
+	bReplicates = true;
+	bAlwaysRelevant = true;
+}
+
+void ATrainGamePlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ATrainGamePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATrainGamePlayerState, OwnedRouteCards);
+	DOREPLIFETIME(ATrainGamePlayerState, OwnedWagonCards);
+	DOREPLIFETIME(ATrainGamePlayerState, OwnedTracks);
+}
+
+
+void ATrainGamePlayerState::SetPN(FString Name)
+{
+	SetPlayerName(Name);
+}

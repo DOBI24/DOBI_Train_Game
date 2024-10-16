@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../City/City.h"
+#include "../Card/Card.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameState.h"
 #include "TrainGameState.generated.h"
@@ -20,7 +21,7 @@ struct FRouteCard {
 	UPROPERTY()
 	int32 Point;
 
-	FRouteCard(){}
+	FRouteCard() {}
 
 	FRouteCard(ECity InFrom, ECity InTo, int32 InPoint) : From(InFrom), To(InTo), Point(InPoint) {}
 };
@@ -42,12 +43,24 @@ protected:
 public:
 	ATrainGameState();
 
-	UPROPERTY(BlueprintReadWrite, Replicated)
+	UPROPERTY(Replicated, BlueprintReadWrite)
 	TArray<FRouteCard> RouteCards;
 
-	UPROPERTY(BlueprintReadWrite, Replicated)
+	UPROPERTY(Replicated, BlueprintReadWrite)
 	TArray<FRouteCard> LongRouteCards;
+
+	UPROPERTY(ReplicatedUsing=OnRep_WagonCardsUpdate, BlueprintReadOnly)
+	TArray<FWagonCard> WagonCards;
+
+	UFUNCTION()
+	void OnRep_WagonCardsUpdate();
 
 	UFUNCTION()
 	void CreateRouteCards();
+
+	UFUNCTION()
+	void CreateWagonCards();
+
+	UFUNCTION(Server, Reliable)
+	void DrawStartCards(ATrainGamePlayerState* PlayerState);
 };
