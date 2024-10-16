@@ -14,4 +14,7 @@ class DOBI_TRAIN_GAME_API UCustomGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(BlueprintReadWrite)
+	FString InputName;
 };
