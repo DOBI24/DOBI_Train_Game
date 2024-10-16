@@ -2,11 +2,11 @@
 
 
 #include "TrainGameMode.h"
-#include "TrainGameState.h"
+#include "TrainGamePlayerState.h"
 
 ATrainGameMode::ATrainGameMode()
 {
-	static ConstructorHelpers::FClassFinder<ATrainGameState> GameStateBPClass(TEXT("/Game/Game/BP_TrainGameState"));
+	static ConstructorHelpers::FClassFinder<AGameState> GameStateBPClass(TEXT("/Game/Game/BP_TrainGameState"));
 	if (GameStateBPClass.Class != nullptr)
 	{
 		GameStateClass = GameStateBPClass.Class;
@@ -23,4 +23,11 @@ ATrainGameMode::ATrainGameMode()
 	{
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<ATrainGamePlayerState> PlayerStateBPClass(TEXT("/Game/Game/BP_TrainGamePlayerState"));
+	if (PlayerStateBPClass.Class != nullptr)
+	{
+		PlayerStateClass = PlayerStateBPClass.Class;
+	}
+
 }
