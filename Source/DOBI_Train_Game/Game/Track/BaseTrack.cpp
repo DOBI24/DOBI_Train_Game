@@ -47,18 +47,15 @@ void ABaseTrack::AddFieldToFields(ABaseField* field)
 {
 	Fields.Emplace(field);
 	FieldCount++;
-	UE_LOG(LogAudio, Warning, TEXT("Adding successfully %d"), Fields.Num());
 }
 
 void ABaseTrack::SR_ChangeOwner_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Benne"));
 	MC_ChangeOwner();
 }
 
 void ABaseTrack::MC_ChangeOwner_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Multicast Change Owner"));
 	HasTrackOwner = true;
 }
 
