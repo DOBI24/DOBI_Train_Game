@@ -20,6 +20,18 @@ enum class ECard_Color : uint8
 	LOCOMOTIVE
 };
 
+USTRUCT(BlueprintType)
+struct FWagonCard {
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	ECard_Color Color;
+
+	FWagonCard() : Color(ECard_Color::PINK) {}
+
+	FWagonCard(ECard_Color InColor) : Color(InColor) {}
+};
+
 UCLASS()
 class DOBI_TRAIN_GAME_API ACard : public AActor
 {
