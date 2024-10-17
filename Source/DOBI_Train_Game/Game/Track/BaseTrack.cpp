@@ -49,6 +49,55 @@ void ABaseTrack::AddFieldToFields(ABaseField* field)
 	FieldCount++;
 }
 
+FVector ABaseTrack::GetTrackColorInVector()
+{
+	FVector TrackColorRGB(0, 0, 0);
+	switch (TrackColor)
+	{
+	case ETrack_Color::NO_COLOR:
+		TrackColorRGB = { 144.0f, 150.0f, 150.0f };
+		break;
+	case ETrack_Color::PINK:
+		 TrackColorRGB = { 189.0f, 135.0f, 174.0f};
+		break;
+	case ETrack_Color::WHITE:
+		 TrackColorRGB = { 246.0f, 247.0f, 250.0f};
+		break;
+	case ETrack_Color::BLUE:
+		 TrackColorRGB = { 56.0f, 156.0f, 213.0f};
+		break;
+	case ETrack_Color::YELLOW:
+		 TrackColorRGB = { 230.0f, 228.0f, 60.0f};
+		break;
+	case ETrack_Color::ORANGE:
+		 TrackColorRGB = { 214.0f, 135.0f, 44.0f};
+		break;
+	case ETrack_Color::BLACK:
+		 TrackColorRGB = { 56.0f, 69.0f, 82.0f};
+		break;
+	case ETrack_Color::RED:
+		 TrackColorRGB = { 185.0f, 31.0f, 39.0f};
+		break;
+	case ETrack_Color::GREEN:
+		 TrackColorRGB = { 113.0f, 186.0f, 50.0f};
+		break;
+	}
+	TrackColorRGB = TrackColorRGB / 255.0f;
+	return TrackColorRGB;
+}
+
+void ABaseTrack::SR_SetTrackStaticMeshColor_Implementation(UStaticMeshComponent* Mesh)
+{
+	MC_SetTrackStaticMeshColor(Mesh);
+}
+
+void ABaseTrack::MC_SetTrackStaticMeshColor_Implementation(UStaticMeshComponent* Mesh)
+{
+	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(Mesh->GetMaterial(0), this);
+	DynMaterial->SetVectorParameterValue("Color", GetTrackColorInVector());
+	Mesh->SetMaterial(0, DynMaterial);
+}
+
 void ABaseTrack::SR_ChangeOwner_Implementation()
 {
 	MC_ChangeOwner();

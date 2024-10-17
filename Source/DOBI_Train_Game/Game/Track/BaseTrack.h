@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/StaticMeshComponent.h"
 #include "Track.h"
 #include "../City/City.h"
 #include "GameFramework/Actor.h"
@@ -30,7 +31,7 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
 	bool HasTrackOwner;
 
-	UPROPERTY(Replicated, EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
 	ETrack_Color TrackColor;
 
 	UPROPERTY(Replicated, EditAnywhere)
@@ -59,4 +60,13 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_ChangeOwner();
+
+	UFUNCTION(BlueprintPure)
+	FVector GetTrackColorInVector();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_SetTrackStaticMeshColor(UStaticMeshComponent* Mesh);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_SetTrackStaticMeshColor(UStaticMeshComponent* Mesh);
 };
