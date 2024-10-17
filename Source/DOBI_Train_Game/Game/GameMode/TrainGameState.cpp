@@ -112,4 +112,15 @@ void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* Playe
 		WagonCards.RemoveAt(WagonCards.Num()-1);
 	}
 	OnRep_WagonCardsUpdate();
+
+	//Draw 1 Long route card
+	PlayerState->OwnedRouteCards.Emplace(LongRouteCards.Last());
+	LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
+
+	//Draw 3 route cards
+	for (int i = 0; i < 3; i++)
+	{
+		PlayerState->OwnedRouteCards.Emplace(RouteCards.Last());
+		RouteCards.RemoveAt(RouteCards.Num() - 1);
+	}
 }
