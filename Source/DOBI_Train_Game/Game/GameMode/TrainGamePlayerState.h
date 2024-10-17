@@ -41,10 +41,10 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<FWagonCard> OwnedWagonCards;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<FRouteCard> OwnedRouteCards;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<ABaseTrack*> OwnedTracks;
 
 	UFUNCTION(BlueprintCallable)
