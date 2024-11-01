@@ -2,7 +2,7 @@
 
 #pragma once
 
-UENUM()
+UENUM(BlueprintType)
 enum class ETrack_Color : uint8
 {
 	NO_COLOR = 0,
@@ -16,7 +16,7 @@ enum class ETrack_Color : uint8
 	GREEN = 8
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class ETrack_Type : uint8
 {
 	NORMAL,
