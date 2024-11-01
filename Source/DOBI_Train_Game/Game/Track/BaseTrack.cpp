@@ -7,7 +7,7 @@
 #include "../GameMode/TrainGamePlayerController.h"
 
 // Sets default values
-ABaseTrack::ABaseTrack() : FieldCount(0), FerryCount(0), HasTrackOwner(false)
+ABaseTrack::ABaseTrack() : HasTrackOwner(false), FieldCount(0), FerryCount(0)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -58,28 +58,28 @@ FVector ABaseTrack::GetTrackColorInVector()
 		TrackColorRGB = { 144.0f, 150.0f, 150.0f };
 		break;
 	case ETrack_Color::PINK:
-		 TrackColorRGB = { 189.0f, 135.0f, 174.0f};
+		 TrackColorRGB = { 190.0f, 130.0f, 180.0f};
 		break;
 	case ETrack_Color::WHITE:
-		 TrackColorRGB = { 246.0f, 247.0f, 250.0f};
+		 TrackColorRGB = { 250.0f, 250.0f, 250.0f};
 		break;
 	case ETrack_Color::BLUE:
-		 TrackColorRGB = { 56.0f, 156.0f, 213.0f};
+		 TrackColorRGB = { 60.0f, 160.0f, 215.0f};
 		break;
 	case ETrack_Color::YELLOW:
-		 TrackColorRGB = { 230.0f, 228.0f, 60.0f};
+		 TrackColorRGB = { 230.0f, 230.0f, 60.0f};
 		break;
 	case ETrack_Color::ORANGE:
-		 TrackColorRGB = { 214.0f, 135.0f, 44.0f};
+		 TrackColorRGB = { 215.0f, 135.0f, 45.0f};
 		break;
 	case ETrack_Color::BLACK:
-		 TrackColorRGB = { 56.0f, 69.0f, 82.0f};
+		 TrackColorRGB = { 60.0f, 60.0f, 60.0f};
 		break;
 	case ETrack_Color::RED:
-		 TrackColorRGB = { 185.0f, 31.0f, 39.0f};
+		 TrackColorRGB = { 185.0f, 30.0f, 40.0f};
 		break;
 	case ETrack_Color::GREEN:
-		 TrackColorRGB = { 113.0f, 186.0f, 50.0f};
+		 TrackColorRGB = { 115.0f, 190.0f, 50.0f};
 		break;
 	}
 	TrackColorRGB = TrackColorRGB / 255.0f;

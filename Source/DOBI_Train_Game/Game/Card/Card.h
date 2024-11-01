@@ -6,18 +6,19 @@
 #include "GameFramework/Actor.h"
 #include "Card.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ECard_Color : uint8
 {
-	PINK,
-	WHITE,
-	BLUE,
-	YELLOW,
-	ORANGE,
-	BLACK,
-	RED,
-	GREEN,
-	LOCOMOTIVE
+	LOCOMOTIVE = 0,
+	PINK = 1,
+	WHITE = 2,
+	BLUE = 3,
+	YELLOW = 4,
+	ORANGE = 5,
+	BLACK = 6,
+	RED = 7,
+	GREEN = 8,
+	DEFAULT_VALUE = 9
 };
 
 USTRUCT(BlueprintType)
@@ -27,9 +28,12 @@ struct FWagonCard {
 	UPROPERTY(BlueprintReadOnly)
 	ECard_Color Color;
 
-	FWagonCard() : Color(ECard_Color::PINK) {}
+	UPROPERTY(BlueprintReadWrite)
+	int32 Amount;
 
-	FWagonCard(ECard_Color InColor) : Color(InColor) {}
+	FWagonCard() : Color(ECard_Color::PINK), Amount(0) {}
+
+	FWagonCard(ECard_Color InColor) : Color(InColor), Amount(0) {}
 };
 
 UCLASS()

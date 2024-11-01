@@ -34,7 +34,7 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
 	ETrack_Color TrackColor;
 
-	UPROPERTY(Replicated, EditAnywhere)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
 	ETrack_Type TrackType;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)

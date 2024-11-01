@@ -25,7 +25,10 @@ void ABaseField::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Field has no parent"));
 	}
 	SetOwner(GetWorld()->GetFirstPlayerController());
-	InitializeParent();
+
+	if (HasAuthority()) {
+		InitializeParent();
+	}
 }
 
 // Called every frame
