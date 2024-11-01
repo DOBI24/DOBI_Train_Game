@@ -49,4 +49,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetPN(FString Name);
+
+	UFUNCTION()
+	void AddWagonCard(FWagonCard Card, ATrainGamePlayerController* Controller);
 };

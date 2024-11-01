@@ -27,11 +27,17 @@ void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(ATrainGameState, RouteCards);
 	DOREPLIFETIME(ATrainGameState, LongRouteCards);
 	DOREPLIFETIME(ATrainGameState, WagonCards);
+	DOREPLIFETIME(ATrainGameState, DiscardWagonCards);
 }
 
 void ATrainGameState::OnRep_WagonCardsUpdate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Frissites"));
+	UE_LOG(LogTemp, Warning, TEXT("update"));
+}
+
+void ATrainGameState::OnRep_DiscardWagonCardsUpdate()
+{
+	UE_LOG(LogTemp, Warning, TEXT("update"));
 }
 
 void ATrainGameState::CreateRouteCards()
@@ -90,6 +96,8 @@ void ATrainGameState::CreateRouteCards()
 
 void ATrainGameState::CreateWagonCards()
 {
+	WagonCards.Emplace(FWagonCard(ECard_Color::LOCOMOTIVE));
+	WagonCards.Emplace(FWagonCard(ECard_Color::LOCOMOTIVE));
 	for (int i = 0; i < 9; i++)
 	{
 		for (int j = 0; j < 12; j++)
@@ -97,18 +105,16 @@ void ATrainGameState::CreateWagonCards()
 			WagonCards.Emplace(FWagonCard(ECard_Color(i)));
 		}
 	}
-	WagonCards.Emplace(FWagonCard(ECard_Color::LOCOMOTIVE));
-	WagonCards.Emplace(FWagonCard(ECard_Color::LOCOMOTIVE));
 	OnRep_WagonCardsUpdate();
 }
 
-void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* PlayerState)
+void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
 {
 	//Draw 4 wagon cards
 	for (int i = 0; i < 4; i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Fut: %d"), i);
-		PlayerState->OwnedWagonCards.Emplace(WagonCards.Last());
+		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
 		WagonCards.RemoveAt(WagonCards.Num()-1);
 	}
 	OnRep_WagonCardsUpdate();

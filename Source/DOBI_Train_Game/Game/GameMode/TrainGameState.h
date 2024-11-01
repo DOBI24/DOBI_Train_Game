@@ -49,11 +49,17 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	TArray<FRouteCard> LongRouteCards;
 
-	UPROPERTY(ReplicatedUsing=OnRep_WagonCardsUpdate, BlueprintReadOnly)
+	UPROPERTY(ReplicatedUsing = OnRep_WagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> WagonCards;
+
+	UPROPERTY(ReplicatedUsing = OnRep_DiscardWagonCardsUpdate, BlueprintReadOnly)
+	TArray<FWagonCard> DiscardWagonCards;
 
 	UFUNCTION()
 	void OnRep_WagonCardsUpdate();
+
+	UFUNCTION()
+	void OnRep_DiscardWagonCardsUpdate();
 
 	UFUNCTION()
 	void CreateRouteCards();
@@ -62,5 +68,5 @@ public:
 	void CreateWagonCards();
 
 	UFUNCTION(Server, Reliable)
-	void DrawStartCards(ATrainGamePlayerState* PlayerState);
+	void DrawStartCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
 };

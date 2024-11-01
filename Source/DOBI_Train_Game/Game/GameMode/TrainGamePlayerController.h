@@ -20,9 +20,15 @@ protected:
 public:
 	ATrainGamePlayerController();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CallDrawStartCards();
 
 	UFUNCTION(Server, Reliable)
-	void SR_CallDrawStartCards(ATrainGamePlayerState* PlayerStateParam);
+	void SR_CallDrawStartCards(ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void TriggerHUDWidget_WagonCards(ECard_Color CardColor);
+
+	UFUNCTION(Client, Reliable)
+	void CL_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 };

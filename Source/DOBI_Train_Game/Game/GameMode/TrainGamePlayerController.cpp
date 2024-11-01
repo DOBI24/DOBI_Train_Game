@@ -4,6 +4,7 @@
 #include "TrainGamePlayerController.h"
 #include "Engine/Engine.h"
 #include "TrainGamePlayerState.h"
+#include "../../CustomGameInstance.h"
 
 ATrainGamePlayerController::ATrainGamePlayerController()
 {
@@ -15,6 +16,10 @@ void ATrainGamePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	if (IsLocalPlayerController()) {
+		ATrainGamePlayerState* TrainPlayerState = GetPlayerState<ATrainGamePlayerState>();
+		if (TrainPlayerState) {
+			TrainPlayerState->SetPN(Cast<UCustomGameInstance>(GetGameInstance())->InputName);
+		}
 		CallDrawStartCards();
 	}
 }
@@ -26,14 +31,19 @@ void ATrainGamePlayerController::CallDrawStartCards()
 		GetWorldTimerManager().SetTimerForNextTick(this, &ATrainGamePlayerController::CallDrawStartCards);
 		return;
 	}
-	SR_CallDrawStartCards(GetPlayerState<ATrainGamePlayerState>());
+	SR_CallDrawStartCards(GetPlayerState<ATrainGamePlayerState>(), this);
 }
 
-void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(ATrainGamePlayerState* PlayerStateParam)
+void ATrainGamePlayerController::CL_TriggerHUDWidget_WagonCards_Implementation(ECard_Color CardColor)
+{
+	this->TriggerHUDWidget_WagonCards(CardColor);
+}
+
+void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam)
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
 
 	if (GameState) {
-		GameState->DrawStartCards(PlayerStateParam);
+		GameState->DrawStartCards(PlayerStateParam, ControllerParam);
 	}
 }
