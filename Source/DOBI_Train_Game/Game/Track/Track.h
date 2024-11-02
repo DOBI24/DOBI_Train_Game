@@ -13,7 +13,8 @@ enum class ETrack_Color : uint8
 	ORANGE = 5,
 	BLACK = 6,
 	RED = 7,
-	GREEN = 8
+	GREEN = 8,
+	DEFAULT_VALUE = 9
 };
 
 UENUM(BlueprintType)

@@ -7,7 +7,7 @@
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
-ABaseField::ABaseField()
+ABaseField::ABaseField() : StaticMeshColor(ETrack_Color::DEFAULT_VALUE)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -15,19 +15,22 @@ ABaseField::ABaseField()
 	bAlwaysRelevant = true;
 
 	Parent = nullptr;
+	CubeComponent = nullptr;
 }
 
 // Called when the game starts or when spawned
 void ABaseField::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!Parent) {
-		UE_LOG(LogTemp, Warning, TEXT("Field has no parent"));
-	}
+
+	CubeComponent = FindComponentByClass<UStaticMeshComponent>();
+
 	SetOwner(GetWorld()->GetFirstPlayerController());
 
 	if (HasAuthority()) {
 		InitializeParent();
+		StaticMeshColor = Parent->TrackColor;
+		OnRep_ColorUpdate();
 	}
 }
 
@@ -43,9 +46,19 @@ void ABaseField::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ABaseField, Parent);
+	DOREPLIFETIME(ABaseField, StaticMeshColor);
 }
 
 void ABaseField::InitializeParent()
 {
 	Parent->AddFieldToFields(this);
+}
+
+void ABaseField::OnRep_ColorUpdate()
+{
+	if (!CubeComponent) return;
+
+	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(CubeComponent->GetMaterial(0), this);
+	DynMaterial->SetVectorParameterValue("Color", Parent->GetTrackColorInVector());
+	CubeComponent->SetMaterial(0, DynMaterial);
 }

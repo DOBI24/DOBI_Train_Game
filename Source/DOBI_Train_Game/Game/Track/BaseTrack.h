@@ -63,10 +63,4 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FVector GetTrackColorInVector();
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void SR_SetTrackStaticMeshColor(UStaticMeshComponent* Mesh);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MC_SetTrackStaticMeshColor(UStaticMeshComponent* Mesh);
 };

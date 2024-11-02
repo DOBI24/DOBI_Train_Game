@@ -25,11 +25,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
 	ABaseTrack* Parent;
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UPROPERTY()
+	UStaticMeshComponent* CubeComponent;
 
 	UFUNCTION()
 	void InitializeParent();
+
+	UPROPERTY(ReplicatedUsing = OnRep_ColorUpdate)
+	ETrack_Color StaticMeshColor;
+
+	UFUNCTION()
+	void OnRep_ColorUpdate();
 };

@@ -86,18 +86,6 @@ FVector ABaseTrack::GetTrackColorInVector()
 	return TrackColorRGB;
 }
 
-void ABaseTrack::SR_SetTrackStaticMeshColor_Implementation(UStaticMeshComponent* Mesh)
-{
-	MC_SetTrackStaticMeshColor(Mesh);
-}
-
-void ABaseTrack::MC_SetTrackStaticMeshColor_Implementation(UStaticMeshComponent* Mesh)
-{
-	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(Mesh->GetMaterial(0), this);
-	DynMaterial->SetVectorParameterValue("Color", GetTrackColorInVector());
-	Mesh->SetMaterial(0, DynMaterial);
-}
-
 void ABaseTrack::SR_ChangeOwner_Implementation()
 {
 	MC_ChangeOwner();
