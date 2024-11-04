@@ -38,6 +38,12 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	EPlayer_Color PlayerColor;
 
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	int32 TrainCount;
+	
+	UPROPERTY(Replicated, BlueprintReadWrite)
+	int32 StationCount;
+
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<FWagonCard> OwnedWagonCards;
 

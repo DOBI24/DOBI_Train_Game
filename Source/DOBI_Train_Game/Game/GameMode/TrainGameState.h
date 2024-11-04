@@ -8,6 +8,16 @@
 #include "GameFramework/GameState.h"
 #include "TrainGameState.generated.h"
 
+UENUM(BlueprintType)
+enum class EGameState : uint8
+{
+	WAITING_PLAYERS,
+	DRAW_ROUTE_CARDS,
+	DRAW_WAGON_CARDS,
+	GAME,
+	NEXT_PLAYER
+};
+
 USTRUCT(BlueprintType)
 struct FRouteCard {
 	GENERATED_BODY()
@@ -34,6 +44,10 @@ class DOBI_TRAIN_GAME_API ATrainGameState : public AGameState
 {
 	GENERATED_BODY()
 
+private:
+	UPROPERTY()
+	int32 ReadyPlayerCount;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,6 +57,9 @@ protected:
 public:
 	ATrainGameState();
 
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate)
+	EGameState CurrentGameState;
+	
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	TArray<FRouteCard> RouteCards;
 
@@ -56,12 +73,6 @@ public:
 	TArray<FWagonCard> DiscardWagonCards;
 
 	UFUNCTION()
-	void OnRep_WagonCardsUpdate();
-
-	UFUNCTION()
-	void OnRep_DiscardWagonCardsUpdate();
-
-	UFUNCTION()
 	void CreateRouteCards();
 
 	UFUNCTION()
@@ -69,4 +80,16 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void DrawStartCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+
+	UFUNCTION()
+	void PlayerReadyToStart(ATrainGamePlayerState* PlayerState);
+
+	UFUNCTION()
+	void OnRep_WagonCardsUpdate();
+
+	UFUNCTION()
+	void OnRep_DiscardWagonCardsUpdate();
+
+	UFUNCTION()
+	void OnRep_CurrentGameStateUpdate();
 };

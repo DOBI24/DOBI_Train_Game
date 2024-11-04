@@ -4,11 +4,13 @@
 #include "TrainGamePlayerState.h"
 #include "Net/UnrealNetwork.h"
 #include "TrainGamePlayerController.h"
+#include "TrainGameMode.h"
 
 ATrainGamePlayerState::ATrainGamePlayerState()
 {
 	bReplicates = true;
 	bAlwaysRelevant = true;
+
 	OwnedWagonCards = {
 		FWagonCard(ECard_Color::LOCOMOTIVE),
 		FWagonCard(ECard_Color::PINK),
@@ -20,6 +22,8 @@ ATrainGamePlayerState::ATrainGamePlayerState()
 		FWagonCard(ECard_Color::RED),
 		FWagonCard(ECard_Color::GREEN)
 	};
+
+	TrainCount = ATrainGameMode::MAX_TRAIN_COUNT;
 }
 
 void ATrainGamePlayerState::BeginPlay()
@@ -35,6 +39,8 @@ void ATrainGamePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(ATrainGamePlayerState, OwnedWagonCards);
 	DOREPLIFETIME(ATrainGamePlayerState, OwnedTracks);
 	DOREPLIFETIME(ATrainGamePlayerState, PlayerColor);
+	DOREPLIFETIME(ATrainGamePlayerState, TrainCount);
+	DOREPLIFETIME(ATrainGamePlayerState, StationCount);
 }
 
 

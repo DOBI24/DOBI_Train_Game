@@ -4,11 +4,14 @@
 #include "TrainGameState.h"
 #include "Net/UnrealNetwork.h"
 #include "TrainGamePlayerState.h"
+#include "TrainGameplayerController.h"
 
-ATrainGameState::ATrainGameState()
+ATrainGameState::ATrainGameState() : ReadyPlayerCount(0)
 {
 	bReplicates = true;
 	bAlwaysRelevant = true;
+
+	
 	if (HasAuthority()) {
 		CreateRouteCards();
 		CreateWagonCards();
@@ -18,26 +21,21 @@ ATrainGameState::ATrainGameState()
 void ATrainGameState::BeginPlay()
 {
 	Super::BeginPlay();
+	if (HasAuthority()) {
+		CurrentGameState = EGameState::WAITING_PLAYERS;
+		OnRep_CurrentGameStateUpdate();
+	}
 }
 
 void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(ATrainGameState, CurrentGameState);
 	DOREPLIFETIME(ATrainGameState, RouteCards);
 	DOREPLIFETIME(ATrainGameState, LongRouteCards);
 	DOREPLIFETIME(ATrainGameState, WagonCards);
 	DOREPLIFETIME(ATrainGameState, DiscardWagonCards);
-}
-
-void ATrainGameState::OnRep_WagonCardsUpdate()
-{
-	UE_LOG(LogTemp, Warning, TEXT("update"));
-}
-
-void ATrainGameState::OnRep_DiscardWagonCardsUpdate()
-{
-	UE_LOG(LogTemp, Warning, TEXT("update"));
 }
 
 void ATrainGameState::CreateRouteCards()
@@ -107,6 +105,17 @@ void ATrainGameState::CreateWagonCards()
 	}
 	OnRep_WagonCardsUpdate();
 }
+void ATrainGameState::PlayerReadyToStart(ATrainGamePlayerState* PlayerState)
+{
+	if (PlayerArray.Contains(PlayerState)) {
+		ReadyPlayerCount++;
+		if (ReadyPlayerCount == PlayerArray.Num())
+		{
+			CurrentGameState = EGameState::DRAW_ROUTE_CARDS;
+			OnRep_CurrentGameStateUpdate();
+		}
+	}
+}
 
 void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
 {
@@ -128,5 +137,27 @@ void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* Playe
 	{
 		PlayerState->OwnedRouteCards.Emplace(RouteCards.Last());
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
+	}
+}
+
+/* OnRep functions */
+
+void ATrainGameState::OnRep_WagonCardsUpdate()
+{
+	UE_LOG(LogTemp, Warning, TEXT("update"));
+}
+
+void ATrainGameState::OnRep_DiscardWagonCardsUpdate()
+{
+	UE_LOG(LogTemp, Warning, TEXT("update"));
+}
+
+void ATrainGameState::OnRep_CurrentGameStateUpdate()
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
+	
+	if (Controller)
+	{
+		Controller->CheckCurrentGameState();
 	}
 }
