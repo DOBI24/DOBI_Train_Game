@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Blueprint/UserWidget.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TrainGamePlayerController.generated.h"
@@ -16,6 +18,9 @@ class DOBI_TRAIN_GAME_API ATrainGamePlayerController : public APlayerController
 
 private:
 	void TriggerReadyPlayer();
+
+	UPROPERTY(EditAnywhere)
+	TMap<FString, TSubclassOf<UUserWidget>> WidgetReferences;
 
 protected:
 	virtual void BeginPlay() override;
@@ -52,13 +57,7 @@ public:
 
 	/* UI functions */
 	UFUNCTION(BlueprintImplementableEvent)
-	void CreateWaitingPlayerUI();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void CreateDrawRouteCardUI();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void CreateGameUI();
+	void CreatePlayerUI(TSubclassOf<UUserWidget> WidgetClass);
 
 	UFUNCTION()
 	void CheckCurrentGameState();

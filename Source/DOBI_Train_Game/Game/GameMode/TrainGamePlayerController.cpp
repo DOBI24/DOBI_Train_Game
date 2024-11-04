@@ -97,13 +97,13 @@ void ATrainGamePlayerController::CheckCurrentGameState()
 	switch (TrainGameState->CurrentGameState)
 	{
 	case EGameState::WAITING_PLAYERS:
-		CreateWaitingPlayerUI();
+		CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
-		CreateGameUI();
-		CallDrawStartCards();
+		CreatePlayerUI(WidgetReferences["Game"]);
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
+		CallDrawStartCards();
 		break;
 	case EGameState::NEXT_PLAYER:
 		break;
