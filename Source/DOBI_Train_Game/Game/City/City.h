@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "City.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ECity : uint8
 {
 	AMSTERDAM,
