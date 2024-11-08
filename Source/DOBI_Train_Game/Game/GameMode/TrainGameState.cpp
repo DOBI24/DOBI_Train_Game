@@ -105,29 +105,24 @@ void ATrainGameState::CreateWagonCards()
 	}
 	OnRep_WagonCardsUpdate();
 }
-void ATrainGameState::PlayerReadyToStart(ATrainGamePlayerState* PlayerState)
+
+void ATrainGameState::PlayerReadyToNextState(ATrainGamePlayerState* PlayerState)
 {
 	if (PlayerArray.Contains(PlayerState)) {
 		ReadyPlayerCount++;
+		UE_LOG(LogTemp, Warning, TEXT("Erte %d"), ReadyPlayerCount);
 		if (ReadyPlayerCount == PlayerArray.Num())
 		{
-			CurrentGameState = EGameState::DRAW_ROUTE_CARDS;
+			ReadyPlayerCount = 0;
+			CurrentGameState = EGameState((int)CurrentGameState + 1);
+			//CurrentGameState = EGameState::DRAW_ROUTE_CARDS;
 			OnRep_CurrentGameStateUpdate();
 		}
 	}
 }
 
-void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+void ATrainGameState::DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState)
 {
-	//Draw 4 wagon cards
-	for (int i = 0; i < 4; i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Fut: %d"), i);
-		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
-		WagonCards.RemoveAt(WagonCards.Num()-1);
-	}
-	OnRep_WagonCardsUpdate();
-
 	//Draw 1 Long route card
 	PlayerState->OwnedRouteCards.Emplace(LongRouteCards.Last());
 	LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
@@ -138,6 +133,17 @@ void ATrainGameState::DrawStartCards_Implementation(ATrainGamePlayerState* Playe
 		PlayerState->OwnedRouteCards.Emplace(RouteCards.Last());
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
 	}
+}
+
+void ATrainGameState::DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+{
+	//Draw 4 wagon cards
+	for (int i = 0; i < 4; i++)
+	{
+		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
+		WagonCards.RemoveAt(WagonCards.Num()-1);
+	}
+	OnRep_WagonCardsUpdate();
 }
 
 /* OnRep functions */

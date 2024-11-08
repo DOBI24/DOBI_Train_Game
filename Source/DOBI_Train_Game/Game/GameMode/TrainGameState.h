@@ -25,10 +25,10 @@ struct FRouteCard {
 	UPROPERTY(BlueprintReadOnly)
 	ECity From;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	ECity To;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 Point;
 
 	FRouteCard() {}
@@ -57,7 +57,7 @@ protected:
 public:
 	ATrainGameState();
 
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate)
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
 	EGameState CurrentGameState;
 	
 	UPROPERTY(Replicated, BlueprintReadWrite)
@@ -79,10 +79,13 @@ public:
 	void CreateWagonCards();
 
 	UFUNCTION(Server, Reliable)
-	void DrawStartCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+	void DrawStartRouteCards(ATrainGamePlayerState* PlayerState);
+
+	UFUNCTION(Server, Reliable)
+	void DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
 
 	UFUNCTION()
-	void PlayerReadyToStart(ATrainGamePlayerState* PlayerState);
+	void PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
 
 	UFUNCTION()
 	void OnRep_WagonCardsUpdate();

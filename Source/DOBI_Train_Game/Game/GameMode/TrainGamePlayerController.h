@@ -17,6 +17,7 @@ class DOBI_TRAIN_GAME_API ATrainGamePlayerController : public APlayerController
 	GENERATED_BODY()
 
 private:
+	UFUNCTION(BlueprintCallable)
 	void TriggerReadyPlayer();
 
 	UPROPERTY(EditAnywhere)
@@ -35,10 +36,10 @@ public:
 	ATrainGamePlayerController();
 
 	UFUNCTION(BlueprintCallable)
-	void CallDrawStartCards();
+	void CallDrawStartCards(const FString& CardType);
 
 	UFUNCTION(Server, Reliable)
-	void SR_CallDrawStartCards(ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
+	void SR_CallDrawStartCards(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void TriggerHUDWidget_WagonCards(ECard_Color CardColor);

@@ -43,17 +43,22 @@ void ATrainGamePlayerController::CheckLocalBegin()
 	LocalBeginPlay();
 }
 
-void ATrainGamePlayerController::CallDrawStartCards()
+void ATrainGamePlayerController::CallDrawStartCards(const FString& CardType)
 {
-	SR_CallDrawStartCards(GetPlayerState<ATrainGamePlayerState>(), this);
+	SR_CallDrawStartCards(CardType, GetPlayerState<ATrainGamePlayerState>(), this);
 }
 
-void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam)
+void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam)
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
 
 	if (GameState) {
-		GameState->DrawStartCards(PlayerStateParam, ControllerParam);
+		if (CardType == "Wagon") {
+			GameState->DrawStartWagonCards(PlayerStateParam, ControllerParam);
+		}
+		else if (CardType == "Route") {
+			GameState->DrawStartRouteCards(PlayerStateParam);
+		}
 	}
 }
 
@@ -75,7 +80,8 @@ void ATrainGamePlayerController::SetPlayerName()
 void ATrainGamePlayerController::SR_PlayerReady_Implementation(ATrainGamePlayerState* PlayerStateParam)
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
-	GameState->PlayerReadyToStart(PlayerStateParam);
+	GameState->PlayerReadyToNextState(PlayerStateParam);
+	UE_LOG(LogTemp, Warning, TEXT("Server futas"));
 }
 
 void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlayerState* PlayerStateParam, const FString& Name)
@@ -87,6 +93,7 @@ void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlaye
 
 void ATrainGamePlayerController::TriggerReadyPlayer()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("TriggerReadyPlayer"));
 	SR_PlayerReady(GetPlayerState<ATrainGamePlayerState>());
 }
 
@@ -98,12 +105,14 @@ void ATrainGamePlayerController::CheckCurrentGameState()
 	{
 	case EGameState::WAITING_PLAYERS:
 		CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
+		CallDrawStartCards("Route");
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
-		CreatePlayerUI(WidgetReferences["Game"]);
+		CreatePlayerUI(WidgetReferences["DrawRoute"]);
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		CallDrawStartCards();
+		CreatePlayerUI(WidgetReferences["Game"]);
+		CallDrawStartCards("Wagon");
 		break;
 	case EGameState::NEXT_PLAYER:
 		break;
