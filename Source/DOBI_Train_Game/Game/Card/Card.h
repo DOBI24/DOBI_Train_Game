@@ -42,19 +42,15 @@ class DOBI_TRAIN_GAME_API ACard : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ACard();
-
-	UPROPERTY()
-	ECard_Color Color;
+	virtual void Tick(float DeltaTime) override;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+	UPROPERTY()
+	ECard_Color Color;
 
 	UFUNCTION()
 	bool CreateCardStaticMesh();

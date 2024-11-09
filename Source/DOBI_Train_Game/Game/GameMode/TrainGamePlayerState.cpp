@@ -53,6 +53,6 @@ void ATrainGamePlayerState::AddWagonCard(FWagonCard Card, ATrainGamePlayerContro
 {
 	OwnedWagonCards[(int32)Card.Color].Amount++;
 	if (OwnedWagonCards[(int32)Card.Color].Amount == 1) {
-		Controller->CL_TriggerHUDWidget_WagonCards(Card.Color);
+		Controller->TriggerHUDWidget_WagonCards(Card.Color);
 	}
 }

@@ -28,13 +28,14 @@ class DOBI_TRAIN_GAME_API ATrainGamePlayerState : public APlayerState
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 public:
 	ATrainGamePlayerState();
-	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+	virtual void BeginPlay() override;
+
+public:	
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	EPlayer_Color PlayerColor;
 

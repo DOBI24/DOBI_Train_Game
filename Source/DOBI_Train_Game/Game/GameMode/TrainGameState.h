@@ -44,6 +44,10 @@ class DOBI_TRAIN_GAME_API ATrainGameState : public AGameState
 {
 	GENERATED_BODY()
 
+public:
+	ATrainGameState();
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 private:
 	UPROPERTY()
 	int32 ReadyPlayerCount;
@@ -51,27 +55,7 @@ private:
 protected:
 	virtual void BeginPlay() override;
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 public:
-	ATrainGameState();
-
-	/* TIMER */
-	UPROPERTY()
-	FTimerHandle TimerHandle;
-
-	UPROPERTY()
-	int32 CurrentTime;
-
-	UFUNCTION()
-	void StartTimerTick(int32 Time);
-
-	UFUNCTION(Server, Reliable)
-	void SR_UpdateServerTimer();
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MC_UpdateClientTimer(int32 Time);
-
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
 	EGameState CurrentGameState;
 	
@@ -87,21 +71,39 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_DiscardWagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> DiscardWagonCards;
 
+/* TIMER */
+	UPROPERTY()
+	FTimerHandle TimerHandle;
+
+	UPROPERTY()
+	int32 CurrentTime;
+
+	UFUNCTION()
+	void StartTimerTick(int32 Time);
+
+	UFUNCTION(Server, Reliable)
+	void SR_UpdateServerTimer();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_UpdateClientTimer(int32 Time);
+
+/* SERVER FUNCTIONS */
+	UFUNCTION(Server, Reliable)
+	void SR_DrawStartRouteCards(ATrainGamePlayerState* PlayerState);
+
+	UFUNCTION(Server, Reliable)
+	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+
 	UFUNCTION()
 	void CreateRouteCards();
 
 	UFUNCTION()
 	void CreateWagonCards();
 
-	UFUNCTION(Server, Reliable)
-	void DrawStartRouteCards(ATrainGamePlayerState* PlayerState);
-
-	UFUNCTION(Server, Reliable)
-	void DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
-
 	UFUNCTION()
 	void PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
 
+/* ONREP FUNCTIONS */
 	UFUNCTION()
 	void OnRep_WagonCardsUpdate();
 

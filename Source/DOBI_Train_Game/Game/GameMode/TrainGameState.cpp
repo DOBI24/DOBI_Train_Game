@@ -143,7 +143,7 @@ void ATrainGameState::PlayerReadyToNextState(ATrainGamePlayerState* PlayerState)
 	}
 }
 
-void ATrainGameState::DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState)
+void ATrainGameState::SR_DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState)
 {
 	//Draw 1 Long route card
 	PlayerState->OwnedRouteCards.Emplace(LongRouteCards.Last());
@@ -157,7 +157,7 @@ void ATrainGameState::DrawStartRouteCards_Implementation(ATrainGamePlayerState* 
 	}
 }
 
-void ATrainGameState::DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
 {
 	//Draw 4 wagon cards
 	for (int i = 0; i < 4; i++)

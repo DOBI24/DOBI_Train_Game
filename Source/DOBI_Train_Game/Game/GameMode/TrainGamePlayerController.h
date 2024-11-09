@@ -16,10 +16,10 @@ class DOBI_TRAIN_GAME_API ATrainGamePlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-private:
-	UFUNCTION(BlueprintCallable)
-	void TriggerReadyPlayer();
+public:
+	ATrainGamePlayerController();
 
+private:
 	UPROPERTY(EditAnywhere)
 	TMap<FString, TSubclassOf<UUserWidget>> WidgetReferences;
 
@@ -33,22 +33,16 @@ protected:
 	void CheckLocalBegin();
 
 public:
-	ATrainGamePlayerController();
-
-	UFUNCTION(BlueprintCallable)
-	void CallDrawStartCards(const FString& CardType);
-
-	UFUNCTION(Server, Reliable)
-	void SR_CallDrawStartCards(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
+/* TIMER */
+	UPROPERTY()
+	int32 CurrentTime;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void TriggerHUDWidget_WagonCards(ECard_Color CardColor);
+	void ChangeTimeWidget(int32 Time);
 
-	UFUNCTION(Client, Reliable)
-	void CL_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
-
-	UFUNCTION()
-	void SetPlayerName();
+/* SERVER FUNCTIONS */
+	UFUNCTION(Server, Reliable)
+	void SR_CallDrawStartCards(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
 
 	UFUNCTION(Server, Reliable)
 	void SR_SetPlayerName(ATrainGamePlayerState* PlayerStateParam, const FString& Name);
@@ -56,10 +50,29 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SR_PlayerReady(ATrainGamePlayerState* PlayerStateParam);
 
-	/* UI functions */
+/* CLIENT FUNCTIONS */
+	UFUNCTION(Client, Reliable, BlueprintCallable)
+	void CL_CallDrawStartCards(const FString& CardType);
+
+	UFUNCTION(Client, Reliable, BlueprintCallable)
+	void CL_TriggerReadyPlayer();
+
+	UFUNCTION(Client, Reliable)
+	void CL_SetPlayerName();
+
+/* BLUEPRINT FUNCTIONS */
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
+
+	UFUNCTION()
+	void TriggerHUDWidget_WagonCards(ECard_Color CardColor);
+
+/* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreatePlayerUI(TSubclassOf<UUserWidget> WidgetClass);
 
+
+/* FUNCTIONS */
 	UFUNCTION()
 	void CheckCurrentGameState();
 };
