@@ -53,9 +53,24 @@ protected:
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-
 public:
 	ATrainGameState();
+
+	/* TIMER */
+	UPROPERTY()
+	FTimerHandle TimerHandle;
+
+	UPROPERTY()
+	int32 CurrentTime;
+
+	UFUNCTION()
+	void StartTimerTick(int32 Time);
+
+	UFUNCTION(Server, Reliable)
+	void SR_UpdateServerTimer();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_UpdateClientTimer(int32 Time);
 
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
 	EGameState CurrentGameState;

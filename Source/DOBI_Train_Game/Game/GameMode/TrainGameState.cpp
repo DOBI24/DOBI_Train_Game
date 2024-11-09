@@ -18,6 +18,29 @@ ATrainGameState::ATrainGameState() : ReadyPlayerCount(0)
 	}
 }
 
+void ATrainGameState::StartTimerTick(int32 Time)
+{
+	CurrentTime = Time;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATrainGameState::SR_UpdateServerTimer, 1.0f, true);
+}
+
+void ATrainGameState::SR_UpdateServerTimer_Implementation()
+{
+	MC_UpdateClientTimer(CurrentTime);
+
+	CurrentTime--;
+	if (CurrentTime == 0) {
+		UE_LOG(LogTemp, Warning, TEXT("0"));
+		GetWorldTimerManager().ClearTimer(TimerHandle);
+	}
+}
+
+void ATrainGameState::MC_UpdateClientTimer_Implementation(int32 Time)
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
+	Controller->ChangeTimeWidget(Time);
+}
+
 void ATrainGameState::BeginPlay()
 {
 	Super::BeginPlay();
@@ -110,12 +133,11 @@ void ATrainGameState::PlayerReadyToNextState(ATrainGamePlayerState* PlayerState)
 {
 	if (PlayerArray.Contains(PlayerState)) {
 		ReadyPlayerCount++;
-		UE_LOG(LogTemp, Warning, TEXT("Erte %d"), ReadyPlayerCount);
 		if (ReadyPlayerCount == PlayerArray.Num())
 		{
 			ReadyPlayerCount = 0;
 			CurrentGameState = EGameState((int)CurrentGameState + 1);
-			//CurrentGameState = EGameState::DRAW_ROUTE_CARDS;
+			StartTimerTick(5);
 			OnRep_CurrentGameStateUpdate();
 		}
 	}
