@@ -34,6 +34,9 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_ColorUpdate)
 	ETrack_Color StaticMeshColor;
 
+	UFUNCTION(BlueprintCallable)
+	void HighlightOnClick();
+
 	UFUNCTION()
 	void OnRep_ColorUpdate();
 };

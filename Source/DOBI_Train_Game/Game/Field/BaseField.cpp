@@ -54,6 +54,11 @@ void ABaseField::InitializeParent()
 	Parent->AddFieldToFields(this);
 }
 
+void ABaseField::HighlightOnClick()
+{
+	CubeComponent->SetRenderCustomDepth(!CubeComponent->bRenderCustomDepth);
+}
+
 void ABaseField::OnRep_ColorUpdate()
 {
 	if (!CubeComponent) return;
