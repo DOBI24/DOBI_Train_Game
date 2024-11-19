@@ -100,7 +100,7 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MC_UpdateClientTimer(int32 Time);
 
-/* SERVER FUNCTIONS */
+/* DRAW CARDS */
 	UFUNCTION(Server, Reliable)
 	void SR_DrawStartRouteCards(ATrainGamePlayerState* PlayerState);
 
@@ -110,12 +110,14 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SR_DrawWagonCard(FWagonCard Card, ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
 
+/* CREATE CARDS */
 	UFUNCTION()
 	void CreateRouteCards();
 
 	UFUNCTION()
 	void CreateWagonCards();
 
+/* PLAYER READY */
 	UFUNCTION(Server, Reliable)
 	void SR_PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
 
