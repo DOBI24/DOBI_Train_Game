@@ -18,9 +18,55 @@ ATrainGameState::ATrainGameState() : ReadyPlayerCount(0)
 	}
 }
 
+// Game state controller
+void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
+{
+	CurrentGameState = NewGameState;
+	OnRep_CurrentGameStateUpdate();
+
+	GetWorldTimerManager().ClearTimer(TimerHandle);
+	ReadyQueue.Empty();
+
+	switch (NewGameState)
+	{
+	case EGameState::WAITING_PLAYERS:
+		break;
+	case EGameState::DRAW_ROUTE_CARDS:
+		StartTimerTick(30);
+		ReadyQueue = PlayerArray;
+		break;
+	case EGameState::DRAW_WAGON_CARDS:
+		CurrentPlayerIndex = 0;
+		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
+		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
+		ReadyQueue = PlayerArray;
+		break;
+	case EGameState::GAME:
+		StartTimerTick(90);
+		ReadyQueue.Emplace(CurrentPlayer);
+		break;
+	case EGameState::NEXT_PLAYER:
+		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeUIOnly());
+
+		StartTimerTick(3);
+
+		CurrentPlayerIndex = CurrentPlayerIndex + 1;
+		if (CurrentPlayerIndex == PlayerArray.Num()) {
+			CurrentPlayerIndex = 0;
+		}
+		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
+
+		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
+
+		ReadyQueue.Emplace(CurrentPlayer);
+		break;
+	}
+}
+
 void ATrainGameState::StartTimerTick(int32 Time)
 {
 	CurrentTime = Time;
+	SR_UpdateServerTimer();
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATrainGameState::SR_UpdateServerTimer, 1.0f, true);
 }
 
@@ -30,7 +76,6 @@ void ATrainGameState::SR_UpdateServerTimer_Implementation()
 
 	CurrentTime--;
 	if (CurrentTime == 0) {
-		UE_LOG(LogTemp, Warning, TEXT("0"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 	}
 }
@@ -45,8 +90,7 @@ void ATrainGameState::BeginPlay()
 {
 	Super::BeginPlay();
 	if (HasAuthority()) {
-		CurrentGameState = EGameState::WAITING_PLAYERS;
-		OnRep_CurrentGameStateUpdate();
+		SR_SetGameState(EGameState::WAITING_PLAYERS);
 	}
 }
 
@@ -59,6 +103,8 @@ void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(ATrainGameState, LongRouteCards);
 	DOREPLIFETIME(ATrainGameState, WagonCards);
 	DOREPLIFETIME(ATrainGameState, DiscardWagonCards);
+	DOREPLIFETIME(ATrainGameState, CurrentPlayer);
+	DOREPLIFETIME(ATrainGameState, CurrentPlayerIndex);
 }
 
 void ATrainGameState::CreateRouteCards()
@@ -129,16 +175,31 @@ void ATrainGameState::CreateWagonCards()
 	OnRep_WagonCardsUpdate();
 }
 
-void ATrainGameState::PlayerReadyToNextState(ATrainGamePlayerState* PlayerState)
+void ATrainGameState::SR_PlayerReadyToNextState_Implementation(ATrainGamePlayerState* PlayerState)
+{
+	if (ReadyQueue.Contains(PlayerState)) {
+		ReadyPlayerCount++;
+		if (ReadyPlayerCount == ReadyQueue.Num())
+		{
+			ReadyPlayerCount = 0;
+			if (CurrentGameState == EGameState::NEXT_PLAYER) {
+				SR_SetGameState(EGameState::GAME);
+			}
+			else {
+				SR_SetGameState(EGameState((int)CurrentGameState + 1));
+			}
+		}
+	}
+}
+
+void ATrainGameState::SR_PlayerReadyToStart_Implementation(ATrainGamePlayerState* PlayerState)
 {
 	if (PlayerArray.Contains(PlayerState)) {
 		ReadyPlayerCount++;
 		if (ReadyPlayerCount == PlayerArray.Num())
 		{
 			ReadyPlayerCount = 0;
-			CurrentGameState = EGameState((int)CurrentGameState + 1);
-			StartTimerTick(5);
-			OnRep_CurrentGameStateUpdate();
+			SR_SetGameState(EGameState::DRAW_ROUTE_CARDS);
 		}
 	}
 }
@@ -164,20 +225,23 @@ void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerStat
 	{
 		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
 		WagonCards.RemoveAt(WagonCards.Num()-1);
+		PlayerState->AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE), Controller);
 	}
 	OnRep_WagonCardsUpdate();
 }
 
-/* OnRep functions */
+void ATrainGameState::SR_DrawWagonCard_Implementation(FWagonCard Card, ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+{
+	PlayerState->AddWagonCard(Card, Controller);
+}
 
+/* OnRep functions */
 void ATrainGameState::OnRep_WagonCardsUpdate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("update"));
 }
 
 void ATrainGameState::OnRep_DiscardWagonCardsUpdate()
 {
-	UE_LOG(LogTemp, Warning, TEXT("update"));
 }
 
 void ATrainGameState::OnRep_CurrentGameStateUpdate()
@@ -186,6 +250,6 @@ void ATrainGameState::OnRep_CurrentGameStateUpdate()
 	
 	if (Controller)
 	{
-		Controller->CheckCurrentGameState();
+		Controller->CheckCurrentGameState(CurrentPlayer);
 	}
 }

@@ -56,9 +56,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
-	EGameState CurrentGameState;
-	
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	TArray<FRouteCard> RouteCards;
 
@@ -70,6 +67,22 @@ public:
 
 	UPROPERTY(ReplicatedUsing = OnRep_DiscardWagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> DiscardWagonCards;
+
+/* GAMESTATE */
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
+	EGameState CurrentGameState;
+
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	ATrainGamePlayerState* CurrentPlayer;
+
+	UPROPERTY(Replicated)
+	int32 CurrentPlayerIndex;
+
+	UPROPERTY()
+	TArray<TObjectPtr<APlayerState>> ReadyQueue;
+
+	UFUNCTION(Server, Reliable)
+	void SR_SetGameState(EGameState NewGameState);
 
 /* TIMER */
 	UPROPERTY()
@@ -94,14 +107,20 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
 
+	UFUNCTION(Server, Reliable)
+	void SR_DrawWagonCard(FWagonCard Card, ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+
 	UFUNCTION()
 	void CreateRouteCards();
 
 	UFUNCTION()
 	void CreateWagonCards();
 
-	UFUNCTION()
-	void PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
+	UFUNCTION(Server, Reliable)
+	void SR_PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
+
+	UFUNCTION(Server, Reliable)
+	void SR_PlayerReadyToStart(ATrainGamePlayerState* PlayerState);
 
 /* ONREP FUNCTIONS */
 	UFUNCTION()
