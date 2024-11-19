@@ -60,19 +60,18 @@ public:
 	UFUNCTION(Client, Reliable)
 	void CL_SetPlayerName();
 
+	UFUNCTION(Client, Reliable)
+	void CL_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
+
 /* BLUEPRINT FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
-
-	UFUNCTION()
-	void TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreatePlayerUI(TSubclassOf<UUserWidget> WidgetClass);
 
-
 /* FUNCTIONS */
 	UFUNCTION()
-	void CheckCurrentGameState();
+	void CheckCurrentGameState(ATrainGamePlayerState* CurrentPlayer = nullptr);
 };

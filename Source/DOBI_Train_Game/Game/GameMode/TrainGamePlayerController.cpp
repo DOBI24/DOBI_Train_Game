@@ -72,7 +72,12 @@ void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlaye
 void ATrainGamePlayerController::SR_PlayerReady_Implementation(ATrainGamePlayerState* PlayerStateParam)
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
-	GameState->PlayerReadyToNextState(PlayerStateParam);
+	if (GameState->CurrentGameState == EGameState::WAITING_PLAYERS) {
+		GameState->SR_PlayerReadyToStart(PlayerStateParam);
+		return;
+	}
+
+	GameState->SR_PlayerReadyToNextState(PlayerStateParam);
 }
 
 /* CLIENT FUNCTIONS */
@@ -96,13 +101,12 @@ void ATrainGamePlayerController::CL_SetPlayerName_Implementation()
 	SR_SetPlayerName(GetPlayerState<ATrainGamePlayerState>(), Cast<UCustomGameInstance>(GetGameInstance())->InputName);
 }
 
-/* UI FUNCTIONS */
-void ATrainGamePlayerController::TriggerHUDWidget_WagonCards(ECard_Color CardColor)
+void ATrainGamePlayerController::CL_TriggerHUDWidget_WagonCards_Implementation(ECard_Color CardColor)
 {
 	BP_TriggerHUDWidget_WagonCards(CardColor);
 }
 
-void ATrainGamePlayerController::CheckCurrentGameState()
+void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* CurrentPlayer)
 {
 	ATrainGameState* TrainGameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
 
@@ -119,9 +123,12 @@ void ATrainGamePlayerController::CheckCurrentGameState()
 		CreatePlayerUI(WidgetReferences["Game"]);
 		CL_CallDrawStartCards("Wagon");
 		break;
-	case EGameState::NEXT_PLAYER:
-		break;
 	case EGameState::GAME:
+		if (CurrentPlayer && (CurrentPlayer == GetPlayerState<ATrainGamePlayerState>())) {
+
+		}
+		break;
+	case EGameState::NEXT_PLAYER:
 		break;
 	}
 }
