@@ -41,7 +41,7 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	int32 TrainCount;
-	
+
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	int32 StationCount;
 
