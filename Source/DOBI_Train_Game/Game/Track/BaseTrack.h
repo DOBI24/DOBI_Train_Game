@@ -38,7 +38,7 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<ABaseField*> Fields;
 
-	UPROPERTY(Replicated, EditAnywhere, meta = (EditCondition = "TrackType == ETrack_Type::Ferry"))
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "TrackType == ETrack_Type::Ferry"))
 	int32 FerryCount;
 
 	UPROPERTY(Replicated, EditAnywhere)
