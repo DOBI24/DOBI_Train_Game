@@ -65,7 +65,7 @@ void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(const FStr
 void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlayerState* PlayerStateParam, const FString& Name)
 {
 	if (PlayerStateParam) {
-		PlayerStateParam->SetPN(Name);
+		PlayerStateParam->SR_SetPlayerName(Name);
 	}
 }
 
