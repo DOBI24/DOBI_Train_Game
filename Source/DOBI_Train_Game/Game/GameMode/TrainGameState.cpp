@@ -60,10 +60,10 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 	case EGameState::DRAW_WAGON_CARDS:
 		CurrentPlayerIndex = 0;
 		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
-		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
 		ReadyQueue = PlayerArray;
 		break;
 	case EGameState::GAME:
+		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
 		StartTimerTick(ATrainGameMode::GAME_TIME);
 		ReadyQueue.Emplace(CurrentPlayer);
 		break;
@@ -72,13 +72,11 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 
 		StartTimerTick(3);
 
-		CurrentPlayerIndex = CurrentPlayerIndex + 1;
+		CurrentPlayerIndex++;
 		if (CurrentPlayerIndex == PlayerArray.Num()) {
 			CurrentPlayerIndex = 0;
 		}
 		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
-
-		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
 
 		ReadyQueue.Emplace(CurrentPlayer);
 		break;
