@@ -39,24 +39,34 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	EPlayer_Color PlayerColor;
 
-	UPROPERTY(Replicated, BlueprintReadWrite)
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadWrite)
 	int32 TrainCount;
 
 	UPROPERTY(Replicated, BlueprintReadWrite)
 	int32 StationCount;
 
-	UPROPERTY(Replicated, BlueprintReadOnly)
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> OwnedWagonCards;
 
-	UPROPERTY(Replicated, BlueprintReadOnly)
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
 	TArray<FRouteCard> OwnedRouteCards;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<ABaseTrack*> OwnedTracks;
 
-	UFUNCTION(BlueprintCallable)
-	void SetPN(FString Name);
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
+	int32 Point;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_SetPlayerName(const FString& Name);
 
 	UFUNCTION()
 	void AddWagonCard(FWagonCard Card, ATrainGamePlayerController* Controller);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_AddPoint(int32 Amount);
+
+	/* OnRep FUNCTION */
+	UFUNCTION()
+	void OnRep_PlayerStatUpdate();
 };

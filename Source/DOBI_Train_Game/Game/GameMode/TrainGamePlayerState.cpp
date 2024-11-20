@@ -41,10 +41,11 @@ void ATrainGamePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(ATrainGamePlayerState, PlayerColor);
 	DOREPLIFETIME(ATrainGamePlayerState, TrainCount);
 	DOREPLIFETIME(ATrainGamePlayerState, StationCount);
+	DOREPLIFETIME(ATrainGamePlayerState, Point);
 }
 
 
-void ATrainGamePlayerState::SetPN(FString Name)
+void ATrainGamePlayerState::SR_SetPlayerName_Implementation(const FString& Name)
 {
 	SetPlayerName(Name);
 }
@@ -55,4 +56,16 @@ void ATrainGamePlayerState::AddWagonCard(FWagonCard Card, ATrainGamePlayerContro
 	if (OwnedWagonCards[(int32)Card.Color].Amount == 1) {
 		Controller->CL_TriggerHUDWidget_WagonCards(Card.Color);
 	}
+}
+
+void ATrainGamePlayerState::OnRep_PlayerStatUpdate()
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
+	Controller->BP_UpdatePlayerStatsWidget(this);
+}
+
+void ATrainGamePlayerState::SR_AddPoint_Implementation(int32 Amount)
+{
+	Point += Amount;
+	OnRep_PlayerStatUpdate();
 }
