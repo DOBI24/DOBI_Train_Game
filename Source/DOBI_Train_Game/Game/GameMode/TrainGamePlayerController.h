@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_UpdatePlayerStatsWidget(ATrainGamePlayerState* PlayerStateParam);
+
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreatePlayerUI(TSubclassOf<UUserWidget> WidgetClass);
