@@ -63,12 +63,21 @@ public:
 	UFUNCTION(Client, Reliable)
 	void CL_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
+	UFUNCTION(Client, Reliable)
+	void SetInputModeByServer(bool GameAndUI);
+
 /* BLUEPRINT FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_UpdatePlayerStatsWidget(ATrainGamePlayerState* PlayerStateParam);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OutlineCurrentPlayer(ATrainGamePlayerState* PlayerStateParam);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_DeselectTrack();
 
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)

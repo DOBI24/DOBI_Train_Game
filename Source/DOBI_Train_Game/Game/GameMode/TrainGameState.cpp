@@ -43,8 +43,7 @@ void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 // Game state controller
 void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 {
-	CurrentGameState = NewGameState;
-	OnRep_CurrentGameStateUpdate();
+	ATrainGamePlayerController* Controller = nullptr;
 
 	GetWorldTimerManager().ClearTimer(TimerHandle);
 	ReadyQueue.Empty();
@@ -58,29 +57,33 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		ReadyQueue = PlayerArray;
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		CurrentPlayerIndex = 0;
-		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
+		CurrentPlayerIndex = -1;
 		ReadyQueue = PlayerArray;
 		break;
 	case EGameState::GAME:
-		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeGameAndUI());
-		StartTimerTick(ATrainGameMode::GAME_TIME);
-		ReadyQueue.Emplace(CurrentPlayer);
-		break;
-	case EGameState::NEXT_PLAYER:
-		CurrentPlayer->GetPlayerController()->SetInputMode(FInputModeUIOnly());
-
-		StartTimerTick(3);
-
 		CurrentPlayerIndex++;
 		if (CurrentPlayerIndex == PlayerArray.Num()) {
 			CurrentPlayerIndex = 0;
 		}
-		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
 
+		CurrentPlayer = Cast<ATrainGamePlayerState>(PlayerArray[CurrentPlayerIndex]);
+		Controller = Cast<ATrainGamePlayerController>(CurrentPlayer->GetPlayerController());
+		Controller->SetInputModeByServer(true);
+
+		StartTimerTick(ATrainGameMode::GAME_TIME);
+		ReadyQueue.Emplace(CurrentPlayer);
+
+		break;
+	case EGameState::NEXT_PLAYER:
+		Controller = Cast<ATrainGamePlayerController>(CurrentPlayer->GetPlayerController());
+		Controller->SetInputModeByServer(false);
+		StartTimerTick(3);
 		ReadyQueue.Emplace(CurrentPlayer);
 		break;
 	}
+
+	CurrentGameState = NewGameState;
+	OnRep_CurrentGameStateUpdate();
 }
 
 /* TIMER */

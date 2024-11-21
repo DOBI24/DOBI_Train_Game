@@ -106,6 +106,18 @@ void ATrainGamePlayerController::CL_TriggerHUDWidget_WagonCards_Implementation(E
 	BP_TriggerHUDWidget_WagonCards(CardColor);
 }
 
+void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAndUI)
+{
+	if (GameAndUI) {
+		SetInputMode(FInputModeGameAndUI());
+		return;
+	}
+
+	SetInputMode(FInputModeUIOnly());
+}
+
+/* FUNCTIONS */
+
 void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* CurrentPlayer)
 {
 	ATrainGameState* TrainGameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
@@ -124,11 +136,16 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		CL_CallDrawStartCards("Wagon");
 		break;
 	case EGameState::GAME:
+		BP_OutlineCurrentPlayer(CurrentPlayer);
 		if (CurrentPlayer && (CurrentPlayer == GetPlayerState<ATrainGamePlayerState>())) {
-
+			
 		}
 		break;
 	case EGameState::NEXT_PLAYER:
+		BP_OutlineCurrentPlayer(CurrentPlayer);
+		BP_DeselectTrack();
 		break;
 	}
 }
+
+
