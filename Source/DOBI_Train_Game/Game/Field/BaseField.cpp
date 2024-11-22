@@ -15,7 +15,7 @@ ABaseField::ABaseField() : StaticMeshColor(ETrack_Color::DEFAULT_VALUE)
 	bAlwaysRelevant = true;
 
 	Parent = nullptr;
-	CubeComponent = nullptr;
+	FieldComponent = nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -23,7 +23,7 @@ void ABaseField::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CubeComponent = FindComponentByClass<UStaticMeshComponent>();
+	FieldComponent = FindComponentByClass<UStaticMeshComponent>();
 
 	SetOwner(GetWorld()->GetFirstPlayerController());
 
@@ -56,14 +56,14 @@ void ABaseField::InitializeParent()
 
 void ABaseField::HighlightOnClick()
 {
-	CubeComponent->SetRenderCustomDepth(!CubeComponent->bRenderCustomDepth);
+	FieldComponent->SetRenderCustomDepth(!FieldComponent->bRenderCustomDepth);
 }
 
 void ABaseField::OnRep_ColorUpdate()
 {
-	if (!CubeComponent) return;
+	if (!FieldComponent) return;
 
-	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(CubeComponent->GetMaterial(0), this);
+	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(FieldComponent->GetMaterial(0), this);
 	DynMaterial->SetVectorParameterValue("Color", Parent->GetTrackColorInVector());
-	CubeComponent->SetMaterial(0, DynMaterial);
+	FieldComponent->SetMaterial(0, DynMaterial);
 }

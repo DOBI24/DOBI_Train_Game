@@ -26,7 +26,7 @@ public:
 	ABaseTrack* Parent;
 
 	UPROPERTY()
-	UStaticMeshComponent* CubeComponent;
+	UStaticMeshComponent* FieldComponent;
 
 	UFUNCTION()
 	void InitializeParent();
