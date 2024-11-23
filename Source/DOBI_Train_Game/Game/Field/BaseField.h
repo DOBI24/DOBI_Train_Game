@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HighlightOnClick();
 
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void MC_ChangeFieldComponentStaticMeshToRail(UStaticMesh* NewStaticMesh);
+
 	UFUNCTION()
 	void OnRep_ColorUpdate();
 };

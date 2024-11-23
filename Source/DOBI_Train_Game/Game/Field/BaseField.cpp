@@ -59,6 +59,13 @@ void ABaseField::HighlightOnClick()
 	FieldComponent->SetRenderCustomDepth(!FieldComponent->bRenderCustomDepth);
 }
 
+void ABaseField::MC_ChangeFieldComponentStaticMeshToRail_Implementation(UStaticMesh* NewStaticMesh)
+{
+	if (!FieldComponent) return;
+	FieldComponent->SetStaticMesh(NewStaticMesh);
+	FieldComponent->SetWorldScale3D(FVector(1.0f, 1.0f, 1.0f));
+}
+
 void ABaseField::OnRep_ColorUpdate()
 {
 	if (!FieldComponent) return;
