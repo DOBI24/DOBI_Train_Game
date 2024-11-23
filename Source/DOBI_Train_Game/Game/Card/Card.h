@@ -25,7 +25,7 @@ USTRUCT(BlueprintType)
 struct FWagonCard {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	ECard_Color Color;
 
 	UPROPERTY(BlueprintReadWrite)
