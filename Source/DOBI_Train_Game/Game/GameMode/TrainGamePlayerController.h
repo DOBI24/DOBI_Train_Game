@@ -76,7 +76,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OutlineCurrentPlayer(ATrainGamePlayerState* PlayerStateParam);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_DeselectTrack();
 
 /* UI FUNCTIONS */
