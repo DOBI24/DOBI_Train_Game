@@ -49,6 +49,11 @@ void ABaseTrack::AddFieldToFields(ABaseField* field)
 	FieldCount++;
 }
 
+void ABaseTrack::SR_SetTrackOwner_Implementation(bool HasOwner)
+{
+	HasTrackOwner = HasOwner;
+}
+
 FVector ABaseTrack::GetTrackColorInVector()
 {
 	FVector TrackColorRGB(0, 0, 0);
@@ -85,14 +90,3 @@ FVector ABaseTrack::GetTrackColorInVector()
 	TrackColorRGB = TrackColorRGB / 255.0f;
 	return TrackColorRGB;
 }
-
-void ABaseTrack::SR_ChangeOwner_Implementation()
-{
-	MC_ChangeOwner();
-}
-
-void ABaseTrack::MC_ChangeOwner_Implementation()
-{
-	HasTrackOwner = true;
-}
-

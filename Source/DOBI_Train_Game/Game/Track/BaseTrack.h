@@ -51,10 +51,7 @@ public:
 	void AddFieldToFields(ABaseField* field);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void SR_ChangeOwner();
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MC_ChangeOwner();
+	void SR_SetTrackOwner(bool HasOwner);
 
 	UFUNCTION(BlueprintPure)
 	FVector GetTrackColorInVector();
