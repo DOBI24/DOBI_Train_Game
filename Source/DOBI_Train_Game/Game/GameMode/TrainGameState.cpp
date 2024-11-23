@@ -11,7 +11,6 @@ ATrainGameState::ATrainGameState() : ReadyPlayerCount(0)
 {
 	bReplicates = true;
 	bAlwaysRelevant = true;
-
 	
 	if (HasAuthority()) {
 		CreateRouteCards();
@@ -79,6 +78,9 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		Controller->SetInputModeByServer(false);
 		StartTimerTick(3);
 		ReadyQueue.Emplace(CurrentPlayer);
+
+		BP_CheckWagonCardCount();
+
 		break;
 	}
 
@@ -134,7 +136,10 @@ void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerStat
 	{
 		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
 		WagonCards.RemoveAt(WagonCards.Num() - 1);
+		
+		//--------- DEBUG ---------
 		PlayerState->AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE), Controller);
+		//--------- DEBUG ---------
 	}
 	OnRep_WagonCardsUpdate();
 }

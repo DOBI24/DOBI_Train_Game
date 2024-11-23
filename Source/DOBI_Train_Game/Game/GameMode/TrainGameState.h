@@ -124,6 +124,10 @@ public:
 	UFUNCTION(Server, Reliable)
 	void SR_PlayerReadyToStart(ATrainGamePlayerState* PlayerState);
 
+/* BLUEPRINT FUNCTIONS */
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_CheckWagonCardCount();
+
 /* ONREP FUNCTIONS */
 	UFUNCTION()
 	void OnRep_WagonCardsUpdate();
