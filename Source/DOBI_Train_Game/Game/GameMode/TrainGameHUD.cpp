@@ -1,5 +1,12 @@
 // @Copyright Marton Pal SZTE
 
 
-#include "Game/GameMode/TrainGameHUD.h"
+#include "TrainGameHUD.h"
 
+ATrainGameHUD::ATrainGameHUD()
+{
+}
+
+void ATrainGameHUD::BeginPlay()
+{
+}
