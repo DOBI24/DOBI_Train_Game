@@ -137,9 +137,9 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		//CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
 		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/Waiting_Player/Waiting_Player.Waiting_Player_C"));
 		//TrainHUD->SwitchScene(WidgetReferences["WaitingPlayer"]);
-		CL_CallDrawStartCards("Route");
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
+		CL_CallDrawStartCards("Route");
 		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/DrawRouteCards/WBP_DrawRoute.WBP_DrawRoute_C"));
 		//TrainHUD->SwitchScene(WidgetReferences["DrawRoute"]);
 		SwitchScene(WidgetReferences["DrawRoute"]);
