@@ -115,16 +115,16 @@ void ATrainGameState::MC_UpdateClientTimer_Implementation(int32 Time)
 	Controller->ChangeTimeWidget(Time);
 }
 
-void ATrainGameState::SR_DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState)
+void ATrainGameState::SR_DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
 {
 	//Draw 1 Long route card
-	PlayerState->OwnedRouteCards.Emplace(LongRouteCards.Last());
+	PlayerState->AddRouteCard(LongRouteCards.Last(), Controller);
 	LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
 
 	//Draw 3 route cards
 	for (int i = 0; i < 3; i++)
 	{
-		PlayerState->OwnedRouteCards.Emplace(RouteCards.Last());
+		PlayerState->AddRouteCard(RouteCards.Last(), Controller);
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
 	}
 }

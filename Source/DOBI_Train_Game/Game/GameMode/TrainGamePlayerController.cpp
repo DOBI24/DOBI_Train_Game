@@ -36,7 +36,8 @@ void ATrainGamePlayerController::LocalBeginPlay()
 
 void ATrainGamePlayerController::CheckLocalBegin()
 {
-	if (!GetPlayerState<ATrainGamePlayerState>() || !GetWorld()->GetGameState())
+	if (!GetPlayerState<ATrainGamePlayerState>() ||
+		!GetWorld()->GetGameState())
 	{
 		GetWorldTimerManager().SetTimerForNextTick(this, &ATrainGamePlayerController::CheckLocalBegin);
 		return;
@@ -57,7 +58,7 @@ void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(const FStr
 			GameState->SR_DrawStartWagonCards(PlayerStateParam, ControllerParam);
 		}
 		else if (CardType == "Route") {
-			GameState->SR_DrawStartRouteCards(PlayerStateParam);
+			GameState->SR_DrawStartRouteCards(PlayerStateParam, ControllerParam);
 		}
 	}
 }
@@ -106,13 +107,19 @@ void ATrainGamePlayerController::CL_TriggerHUDWidget_WagonCards_Implementation(E
 	BP_TriggerHUDWidget_WagonCards(CardColor);
 }
 
+void ATrainGamePlayerController::CL_TriggerRouteWidget_RouteCards_Implementation(FRouteCard Card, int32 Index)
+{
+	BP_TriggerRouteWidget_RouteCards(Card, Index);
+}
+
 void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAndUI)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Mode: %s"), GameAndUI ? TEXT("GameAndUI") : TEXT("UIOnly"));
 	if (GameAndUI) {
 		SetInputMode(FInputModeGameAndUI());
 		return;
 	}
-
+	
 	SetInputMode(FInputModeUIOnly());
 }
 
@@ -121,18 +128,25 @@ void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAn
 void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* CurrentPlayer)
 {
 	ATrainGameState* TrainGameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+	//ATrainGameHUD* TrainHUD = Cast<ATrainGameHUD>(GetHUD());
+	//TSubclassOf<UUserWidget> TargetWidgetClass = nullptr;
 
 	switch (TrainGameState->CurrentGameState)
 	{
 	case EGameState::WAITING_PLAYERS:
-		CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
+		//CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
+		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/Waiting_Player/Waiting_Player.Waiting_Player_C"));
+		//TrainHUD->SwitchScene(WidgetReferences["WaitingPlayer"]);
 		CL_CallDrawStartCards("Route");
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
-		CreatePlayerUI(WidgetReferences["DrawRoute"]);
+		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/DrawRouteCards/WBP_DrawRoute.WBP_DrawRoute_C"));
+		//TrainHUD->SwitchScene(WidgetReferences["DrawRoute"]);
+		SwitchScene(WidgetReferences["DrawRoute"]);
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		CreatePlayerUI(WidgetReferences["Game"]);
+		//TrainHUD->SwitchScene(WidgetReferences["Game"]);
+		SwitchScene(WidgetReferences["Game"]);
 		CL_CallDrawStartCards("Wagon");
 		break;
 	case EGameState::GAME:
@@ -147,5 +161,3 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		break;
 	}
 }
-
-

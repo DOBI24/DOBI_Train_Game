@@ -102,7 +102,7 @@ public:
 
 /* DRAW CARDS */
 	UFUNCTION(Server, Reliable)
-	void SR_DrawStartRouteCards(ATrainGamePlayerState* PlayerState);
+	void SR_DrawStartRouteCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
 
 	UFUNCTION(Server, Reliable)
 	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);

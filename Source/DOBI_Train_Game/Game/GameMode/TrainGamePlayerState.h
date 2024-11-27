@@ -63,6 +63,9 @@ public:
 	UFUNCTION()
 	void AddWagonCard(FWagonCard Card, ATrainGamePlayerController* Controller);
 
+	UFUNCTION()
+	void AddRouteCard(FRouteCard Card, ATrainGamePlayerController* Controller);
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_AddPoint(int32 Amount);
 
