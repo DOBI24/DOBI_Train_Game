@@ -5,6 +5,7 @@
 #include "Engine/Engine.h"
 #include "TrainGamePlayerState.h"
 #include "../../CustomGameInstance.h"
+#include "TrainGameMode.h"
 
 ATrainGamePlayerController::ATrainGamePlayerController()
 {
@@ -107,9 +108,9 @@ void ATrainGamePlayerController::CL_TriggerHUDWidget_WagonCards_Implementation(E
 	BP_TriggerHUDWidget_WagonCards(CardColor);
 }
 
-void ATrainGamePlayerController::CL_TriggerRouteWidget_RouteCards_Implementation(FRouteCard Card, int32 Index)
+void ATrainGamePlayerController::CL_TriggerRouteWidgets_AddRouteCards_Implementation(FRouteCard Card)
 {
-	BP_TriggerRouteWidget_RouteCards(Card, Index);
+	BP_TriggerRouteWidgets_AddRouteCards(Card);
 }
 
 void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAndUI)
@@ -125,27 +126,25 @@ void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAn
 
 /* FUNCTIONS */
 
+TMap<int32, int32> ATrainGamePlayerController::GetPOINT_FROM_LENGTH()
+{
+	return ATrainGameMode::POINT_FROM_LENGTH;
+}
+
 void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* CurrentPlayer)
 {
 	ATrainGameState* TrainGameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
-	//ATrainGameHUD* TrainHUD = Cast<ATrainGameHUD>(GetHUD());
-	//TSubclassOf<UUserWidget> TargetWidgetClass = nullptr;
+	ATrainGamePlayerState* LocalPlayerState = Cast<ATrainGamePlayerState>(PlayerState);
 
 	switch (TrainGameState->CurrentGameState)
 	{
 	case EGameState::WAITING_PLAYERS:
-		//CreatePlayerUI(WidgetReferences["WaitingPlayer"]);
-		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/Waiting_Player/Waiting_Player.Waiting_Player_C"));
-		//TrainHUD->SwitchScene(WidgetReferences["WaitingPlayer"]);
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
-		CL_CallDrawStartCards("Route");
-		//TargetWidgetClass = LoadClass<UUserWidget>(nullptr, TEXT("/Game/Game/UI/DrawRouteCards/WBP_DrawRoute.WBP_DrawRoute_C"));
-		//TrainHUD->SwitchScene(WidgetReferences["DrawRoute"]);
 		SwitchScene(WidgetReferences["DrawRoute"]);
+		CL_CallDrawStartCards("Route");
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		//TrainHUD->SwitchScene(WidgetReferences["Game"]);
 		SwitchScene(WidgetReferences["Game"]);
 		CL_CallDrawStartCards("Wagon");
 		break;

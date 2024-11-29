@@ -64,7 +64,7 @@ public:
 	void CL_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
 	UFUNCTION(Client, Reliable)
-	void CL_TriggerRouteWidget_RouteCards(FRouteCard Card, int32 index);
+	void CL_TriggerRouteWidgets_AddRouteCards(FRouteCard Card);
 
 	UFUNCTION(Client, Reliable)
 	void SetInputModeByServer(bool GameAndUI);
@@ -74,7 +74,7 @@ public:
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_TriggerRouteWidget_RouteCards(FRouteCard Card, int32 Index);
+	void BP_TriggerRouteWidgets_AddRouteCards(FRouteCard Card);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_UpdatePlayerStatsWidget(ATrainGamePlayerState* PlayerStateParam);
@@ -86,8 +86,15 @@ public:
 	void BP_DeselectTrack();
 
 /* UI FUNCTIONS */
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SwitchScene(TSubclassOf<UUserWidget> WidgetClass);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ToggleGameMenu(TSubclassOf<UUserWidget> WidgetClass);
+
+/* GAMEMODE GETTERS */
+	UFUNCTION(BlueprintPure)
+	TMap<int32, int32> GetPOINT_FROM_LENGTH();
 
 /* FUNCTIONS */
 	UFUNCTION()

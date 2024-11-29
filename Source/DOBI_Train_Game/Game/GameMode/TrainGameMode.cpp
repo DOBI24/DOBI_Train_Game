@@ -29,5 +29,13 @@ ATrainGameMode::ATrainGameMode()
 	{
 		PlayerStateClass = PlayerStateBPClass.Class;
 	}
-
 }
+
+TMap<int32, int32> ATrainGameMode::POINT_FROM_LENGTH = {
+	{1, 1},
+	{2, 2},
+	{3, 4},
+	{4, 7},
+	{6, 15},
+	{8, 21},
+};

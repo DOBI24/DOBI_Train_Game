@@ -61,17 +61,17 @@ void ATrainGamePlayerState::AddWagonCard(FWagonCard Card, ATrainGamePlayerContro
 void ATrainGamePlayerState::AddRouteCard(FRouteCard Card, ATrainGamePlayerController* Controller)
 {
 	OwnedRouteCards.Emplace(Card);
-	Controller->CL_TriggerRouteWidget_RouteCards(Card, OwnedRouteCards.Num() - 1);
-}
-
-void ATrainGamePlayerState::OnRep_PlayerStatUpdate()
-{
-	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
-	Controller->BP_UpdatePlayerStatsWidget(this);
+	Controller->CL_TriggerRouteWidgets_AddRouteCards(Card);
 }
 
 void ATrainGamePlayerState::SR_AddPoint_Implementation(int32 Amount)
 {
 	Point += Amount;
 	OnRep_PlayerStatUpdate();
+}
+
+void ATrainGamePlayerState::OnRep_PlayerStatUpdate()
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
+	Controller->BP_UpdatePlayerStatsWidget(this);
 }
