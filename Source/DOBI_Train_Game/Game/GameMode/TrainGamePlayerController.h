@@ -69,6 +69,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void SetInputModeByServer(bool GameAndUI);
 
+	UFUNCTION(BlueprintPure)
+	bool CanInteract();
+
 /* BLUEPRINT FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
@@ -84,6 +87,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_DeselectTrack();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_TriggerShopWidget_AddWagonCard(ECard_Color CardColor);
 
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

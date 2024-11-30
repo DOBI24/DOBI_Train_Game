@@ -160,3 +160,14 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		break;
 	}
 }
+
+bool ATrainGamePlayerController::CanInteract()
+{
+	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+
+	if (GameState && (GameState->CurrentGameState == EGameState::GAME) && (PlayerState == GameState->CurrentPlayer)) {
+		return true;
+	}
+
+	return false;
+}
