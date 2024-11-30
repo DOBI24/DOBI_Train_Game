@@ -65,6 +65,9 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_WagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> WagonCards;
 
+	UPROPERTY(ReplicatedUsing = OnRep_ShopWagonCardsUpdate, BlueprintReadOnly)
+	TArray<FWagonCard> ShopWagonCards;
+
 	UPROPERTY(ReplicatedUsing = OnRep_DiscardWagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> DiscardWagonCards;
 
@@ -117,6 +120,13 @@ public:
 	UFUNCTION()
 	void CreateWagonCards();
 
+/* SHOP WAGON CARDS*/
+	UFUNCTION(Server, Reliable)
+	void SR_FillShopWagonCards();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_FillShopWagonCards(FWagonCard InputCard);
+
 /* PLAYER READY */
 	UFUNCTION(Server, Reliable)
 	void SR_PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
@@ -137,4 +147,7 @@ public:
 
 	UFUNCTION()
 	void OnRep_CurrentGameStateUpdate();
+
+	UFUNCTION()
+	void OnRep_ShopWagonCardsUpdate();
 };
