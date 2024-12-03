@@ -72,6 +72,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_AddPoint(int32 Amount);
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_DecreaseTrainCount(int32 Amount);
+
 	/* OnRep FUNCTION */
 	UFUNCTION()
 	void OnRep_PlayerStatUpdate();

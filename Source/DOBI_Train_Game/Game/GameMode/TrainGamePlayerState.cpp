@@ -82,6 +82,12 @@ void ATrainGamePlayerState::SR_AddPoint_Implementation(int32 Amount)
 	OnRep_PlayerStatUpdate();
 }
 
+void ATrainGamePlayerState::SR_DecreaseTrainCount_Implementation(int32 Amount)
+{
+	TrainCount -= Amount;
+	OnRep_PlayerStatUpdate();
+}
+
 void ATrainGamePlayerState::OnRep_PlayerStatUpdate()
 {
 	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
