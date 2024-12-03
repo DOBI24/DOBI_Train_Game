@@ -41,22 +41,19 @@ public:
 	void ChangeTimeWidget(int32 Time);
 
 /* SERVER FUNCTIONS */
-	UFUNCTION(Server, Reliable)
-	void SR_CallDrawStartCards(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_CallDrawCards(const FString& CardType);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_CallDrawWagonCards();
 
 	UFUNCTION(Server, Reliable)
 	void SR_SetPlayerName(ATrainGamePlayerState* PlayerStateParam, const FString& Name);
 
-	UFUNCTION(Server, Reliable)
-	void SR_PlayerReady(ATrainGamePlayerState* PlayerStateParam);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_PlayerReady();
 
 /* CLIENT FUNCTIONS */
-	UFUNCTION(Client, Reliable, BlueprintCallable)
-	void CL_CallDrawStartCards(const FString& CardType);
-
-	UFUNCTION(Client, Reliable, BlueprintCallable)
-	void CL_TriggerReadyPlayer();
-
 	UFUNCTION(Client, Reliable)
 	void CL_SetPlayerName();
 
@@ -79,11 +76,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerRouteWidgets_AddRouteCards(FRouteCard Card);
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void BP_UpdatePlayerStatsWidget(ATrainGamePlayerState* PlayerStateParam);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_UpdatePlayerStatsWidget(APlayerState* PlayerStateParam);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_OutlineCurrentPlayer(ATrainGamePlayerState* PlayerStateParam);
+	void BP_OutlineCurrentPlayer(APlayerState* PlayerStateParam);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_DeselectTrack();
@@ -97,6 +94,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ToggleGameMenu(TSubclassOf<UUserWidget> WidgetClass);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void ToggleDrawButtonEnable(bool InIsEnabled);
 
 /* GAMEMODE GETTERS */
 	UFUNCTION(BlueprintPure)

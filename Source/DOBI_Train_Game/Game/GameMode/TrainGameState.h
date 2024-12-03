@@ -105,13 +105,13 @@ public:
 
 /* DRAW CARDS */
 	UFUNCTION(Server, Reliable)
-	void SR_DrawStartRouteCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+	void SR_DrawRouteCards(ATrainGamePlayerState* PlayerState);
 
 	UFUNCTION(Server, Reliable)
-	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState);
 
 	UFUNCTION(Server, Reliable)
-	void SR_DrawWagonCard(FWagonCard Card, ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller);
+	void SR_DrawWagonCard(int32 Amount, ATrainGamePlayerState* PlayerState);
 
 /* CREATE CARDS */
 	UFUNCTION()
@@ -129,7 +129,7 @@ public:
 
 /* PLAYER READY */
 	UFUNCTION(Server, Reliable)
-	void SR_PlayerReadyToNextState(ATrainGamePlayerState* PlayerState);
+	void SR_PlayerReadyToNextState(ATrainGamePlayerState* PlayerState = nullptr);
 
 	UFUNCTION(Server, Reliable)
 	void SR_PlayerReadyToStart(ATrainGamePlayerState* PlayerState);

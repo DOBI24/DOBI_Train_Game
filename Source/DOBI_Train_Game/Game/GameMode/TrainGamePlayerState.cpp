@@ -50,16 +50,28 @@ void ATrainGamePlayerState::SR_SetPlayerName_Implementation(const FString& Name)
 	SetPlayerName(Name);
 }
 
-void ATrainGamePlayerState::AddWagonCard(FWagonCard Card, ATrainGamePlayerController* Controller)
+void ATrainGamePlayerState::SR_AddWagonCard_Implementation(FWagonCard Card)
 {
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetOwningController());
+	
 	OwnedWagonCards[(int32)Card.Color].Amount++;
+	OnRep_PlayerStatUpdate();
+
 	if (OwnedWagonCards[(int32)Card.Color].Amount == 1) {
 		Controller->CL_TriggerHUDWidget_WagonCards(Card.Color);
 	}
 }
 
-void ATrainGamePlayerState::AddRouteCard(FRouteCard Card, ATrainGamePlayerController* Controller)
+void ATrainGamePlayerState::SR_RemoveWagonCard_Implementation(FWagonCard Card)
 {
+	OwnedWagonCards[(int32)Card.Color].Amount--;
+	OnRep_PlayerStatUpdate();
+}
+
+void ATrainGamePlayerState::SR_AddRouteCard_Implementation(FRouteCard Card)
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetOwningController());
+
 	OwnedRouteCards.Emplace(Card);
 	Controller->CL_TriggerRouteWidgets_AddRouteCards(Card);
 }

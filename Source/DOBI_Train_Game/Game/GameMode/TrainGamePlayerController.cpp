@@ -30,7 +30,7 @@ void ATrainGamePlayerController::LocalBeginPlay()
 
 	//TODO: Delete if loading screen is created
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATrainGamePlayerController::CL_TriggerReadyPlayer, 3.0f, false);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATrainGamePlayerController::SR_PlayerReady, 3.0f, false);
 
 	//TriggerReadyPlayer();
 }
@@ -50,18 +50,26 @@ void ATrainGamePlayerController::CheckLocalBegin()
 
 
 /* SERVER FUNCTIONS */
-void ATrainGamePlayerController::SR_CallDrawStartCards_Implementation(const FString& CardType, ATrainGamePlayerState* PlayerStateParam, ATrainGamePlayerController* ControllerParam)
+void ATrainGamePlayerController::SR_CallDrawCards_Implementation(const FString& CardType)
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+	ATrainGamePlayerState* LocalPlayerState = Cast<ATrainGamePlayerState>(PlayerState);
 
 	if (GameState) {
 		if (CardType == "Wagon") {
-			GameState->SR_DrawStartWagonCards(PlayerStateParam, ControllerParam);
+			GameState->SR_DrawWagonCard(4, LocalPlayerState);
 		}
 		else if (CardType == "Route") {
-			GameState->SR_DrawStartRouteCards(PlayerStateParam, ControllerParam);
+			GameState->SR_DrawRouteCards(LocalPlayerState);
 		}
 	}
+}
+
+void ATrainGamePlayerController::SR_CallDrawWagonCards_Implementation()
+{
+	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+
+	GameState->SR_DrawWagonCard(2, Cast<ATrainGamePlayerState>(PlayerState));
 }
 
 void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlayerState* PlayerStateParam, const FString& Name)
@@ -71,28 +79,20 @@ void ATrainGamePlayerController::SR_SetPlayerName_Implementation(ATrainGamePlaye
 	}
 }
 
-void ATrainGamePlayerController::SR_PlayerReady_Implementation(ATrainGamePlayerState* PlayerStateParam)
+void ATrainGamePlayerController::SR_PlayerReady_Implementation()
 {
 	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+	ATrainGamePlayerState* LocalPlayerState = Cast<ATrainGamePlayerState>(PlayerState);
+
 	if (GameState->CurrentGameState == EGameState::WAITING_PLAYERS) {
-		GameState->SR_PlayerReadyToStart(PlayerStateParam);
+		GameState->SR_PlayerReadyToStart(LocalPlayerState);
 		return;
 	}
 
-	GameState->SR_PlayerReadyToNextState(PlayerStateParam);
+	GameState->SR_PlayerReadyToNextState(LocalPlayerState);
 }
 
 /* CLIENT FUNCTIONS */
-void ATrainGamePlayerController::CL_CallDrawStartCards_Implementation(const FString& CardType)
-{
-	SR_CallDrawStartCards(CardType, GetPlayerState<ATrainGamePlayerState>(), this);
-}
-
-void ATrainGamePlayerController::CL_TriggerReadyPlayer_Implementation()
-{
-	SR_PlayerReady(GetPlayerState<ATrainGamePlayerState>());
-}
-
 void ATrainGamePlayerController::CL_SetPlayerName_Implementation()
 {
 	if (!GetPlayerState<ATrainGamePlayerState>())
@@ -124,6 +124,17 @@ void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAn
 	SetInputMode(FInputModeUIOnly());
 }
 
+bool ATrainGamePlayerController::CanInteract()
+{
+	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
+
+	if (GameState && (GameState->CurrentGameState == EGameState::GAME) && (PlayerState == GameState->CurrentPlayer)) {
+		return true;
+	}
+
+	return false;
+}
+
 /* FUNCTIONS */
 
 TMap<int32, int32> ATrainGamePlayerController::GetPOINT_FROM_LENGTH()
@@ -142,32 +153,23 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		break;
 	case EGameState::DRAW_ROUTE_CARDS:
 		SwitchScene(WidgetReferences["DrawRoute"]);
-		CL_CallDrawStartCards("Route");
+		SR_CallDrawCards("Route");
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
 		SwitchScene(WidgetReferences["Game"]);
-		CL_CallDrawStartCards("Wagon");
+		SR_CallDrawCards("Wagon");
 		break;
 	case EGameState::GAME:
 		BP_OutlineCurrentPlayer(CurrentPlayer);
 		if (CurrentPlayer && (CurrentPlayer == GetPlayerState<ATrainGamePlayerState>())) {
-			
+			ToggleDrawButtonEnable(true);
 		}
 		break;
 	case EGameState::NEXT_PLAYER:
+		SwitchScene(WidgetReferences["Game"]);
 		BP_OutlineCurrentPlayer(CurrentPlayer);
 		BP_DeselectTrack();
+		ToggleDrawButtonEnable(false);
 		break;
 	}
-}
-
-bool ATrainGamePlayerController::CanInteract()
-{
-	ATrainGameState* GameState = Cast<ATrainGameState>(GetWorld()->GetGameState());
-
-	if (GameState && (GameState->CurrentGameState == EGameState::GAME) && (PlayerState == GameState->CurrentPlayer)) {
-		return true;
-	}
-
-	return false;
 }

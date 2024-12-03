@@ -48,7 +48,7 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> OwnedWagonCards;
 
-	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	TArray<FRouteCard> OwnedRouteCards;
 
 	UPROPERTY(Replicated, BlueprintReadOnly)
@@ -60,11 +60,14 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_SetPlayerName(const FString& Name);
 
-	UFUNCTION()
-	void AddWagonCard(FWagonCard Card, ATrainGamePlayerController* Controller);
+	UFUNCTION(Server, Reliable)
+	void SR_AddWagonCard(FWagonCard Card);
 
-	UFUNCTION()
-	void AddRouteCard(FRouteCard Card, ATrainGamePlayerController* Controller);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_RemoveWagonCard(FWagonCard Card);
+
+	UFUNCTION(Server, Reliable)
+	void SR_AddRouteCard(FRouteCard Card);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_AddPoint(int32 Amount);

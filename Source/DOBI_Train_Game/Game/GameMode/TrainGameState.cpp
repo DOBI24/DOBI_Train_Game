@@ -57,9 +57,9 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		ReadyQueue = PlayerArray;
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		SR_FillShopWagonCards();
+		//SR_FillShopWagonCards();
 		CurrentPlayerIndex = -1;
-		ReadyQueue = PlayerArray;
+		StartTimerTick(3);
 		break;
 	case EGameState::GAME:
 		CurrentPlayerIndex++;
@@ -79,7 +79,6 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		Controller = Cast<ATrainGamePlayerController>(CurrentPlayer->GetPlayerController());
 		Controller->SetInputModeByServer(false);
 		StartTimerTick(3);
-		ReadyQueue.Emplace(CurrentPlayer);
 
 		BP_CheckWagonCardCount();
 
@@ -100,15 +99,14 @@ void ATrainGameState::StartTimerTick(int32 Time)
 
 void ATrainGameState::SR_UpdateServerTimer_Implementation()
 {
-	CurrentTime--;
 	MC_UpdateClientTimer(CurrentTime);
 
 	if (CurrentTime == 0) {
 		GetWorldTimerManager().ClearTimer(TimerHandle);
-		for (APlayerState* Player : ReadyQueue) {
-			SR_PlayerReadyToNextState(Cast<ATrainGamePlayerState>(Player));
-		}
+		SR_PlayerReadyToNextState();
 	}
+
+	CurrentTime--;
 }
 
 void ATrainGameState::MC_UpdateClientTimer_Implementation(int32 Time)
@@ -117,43 +115,62 @@ void ATrainGameState::MC_UpdateClientTimer_Implementation(int32 Time)
 	Controller->ChangeTimeWidget(Time);
 }
 
-void ATrainGameState::SR_DrawStartRouteCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+/* DRAW CARDS */
+void ATrainGameState::SR_DrawRouteCards_Implementation(ATrainGamePlayerState* PlayerState)
 {
-	//Draw 1 Long route card
-	PlayerState->AddRouteCard(LongRouteCards.Last(), Controller);
-	LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
+	int32 Amount = 0;
 
-	//Draw 3 route cards
-	for (int i = 0; i < 3; i++)
-	{
-		PlayerState->AddRouteCard(RouteCards.Last(), Controller);
+	if (CurrentGameState == EGameState::DRAW_ROUTE_CARDS) {
+		//Draw 1 Long route card
+		PlayerState->SR_AddRouteCard(LongRouteCards.Last());
+		LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
+	}
+
+	while (Amount < 3 && RouteCards.Num() != 0) {
+		PlayerState->SR_AddRouteCard(RouteCards.Last());
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
+		Amount++;
 	}
 }
 
-void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState)
 {
 	//Draw 4 wagon cards
 	for (int i = 0; i < 4; i++)
 	{
-		PlayerState->AddWagonCard(WagonCards.Last(), Controller);
+		PlayerState->SR_AddWagonCard(WagonCards.Last());
 		WagonCards.RemoveAt(WagonCards.Num() - 1);
 		
 		//--------- DEBUG ---------
-		PlayerState->AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE), Controller);
+		PlayerState->SR_AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE));
 		//--------- DEBUG ---------
 	}
 	OnRep_WagonCardsUpdate();
 }
 
-void ATrainGameState::SR_DrawWagonCard_Implementation(FWagonCard Card, ATrainGamePlayerState* PlayerState, ATrainGamePlayerController* Controller)
+void ATrainGameState::SR_DrawWagonCard_Implementation(int32 Amount, ATrainGamePlayerState* PlayerState)
 {
-	PlayerState->AddWagonCard(Card, Controller);
+	for (int32 i = 0; i < Amount; i++)
+	{
+		PlayerState->SR_AddWagonCard(WagonCards.Last());
+		WagonCards.RemoveAt(WagonCards.Num() - 1);
+	}
+	OnRep_WagonCardsUpdate();
 }
 
 /* PLAYER READY */
-void ATrainGameState::SR_PlayerReadyToNextState_Implementation(ATrainGamePlayerState* PlayerState)
+void ATrainGameState::SR_PlayerReadyToNextState_Implementation(ATrainGamePlayerState* PlayerState = nullptr)
 {
+	if (!PlayerState) {
+		if (CurrentGameState == EGameState::NEXT_PLAYER) {
+			SR_SetGameState(EGameState::GAME);
+		}
+		else {
+			SR_SetGameState(EGameState((int)CurrentGameState + 1));
+		}
+		return;
+	}
+
 	if (ReadyQueue.Contains(PlayerState)) {
 		ReadyPlayerCount++;
 		if (ReadyPlayerCount == ReadyQueue.Num())
