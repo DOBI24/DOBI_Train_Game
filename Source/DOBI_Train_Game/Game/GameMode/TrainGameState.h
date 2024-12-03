@@ -120,6 +120,9 @@ public:
 	UFUNCTION()
 	void CreateWagonCards();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_AddRouteCard(FRouteCard RouteCard);
+
 /* SHOP WAGON CARDS*/
 	UFUNCTION(Server, Reliable)
 	void SR_FillShopWagonCards();

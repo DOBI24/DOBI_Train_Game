@@ -267,6 +267,12 @@ void ATrainGameState::CreateWagonCards()
 	OnRep_WagonCardsUpdate();
 }
 
+void ATrainGameState::SR_AddRouteCard_Implementation(FRouteCard RouteCard)
+{
+	if (RouteCard.Point >= 20) return;
+	RouteCards.EmplaceAt(0, RouteCard);
+}
+
 /* SHOP WAGON CARDS */
 void ATrainGameState::SR_FillShopWagonCards_Implementation()
 {
