@@ -20,6 +20,21 @@ enum class EPlayer_Color : uint8
 	GREEN
 };
 
+USTRUCT(BlueprintType)
+struct FPath {
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<ECity> CityList;
+
+	FPath(ECity LeftCity, ECity RightCity) {
+		CityList.AddUnique(LeftCity);
+		CityList.AddUnique(RightCity);
+	}
+
+	FPath() {}
+};
+
 /**
  * 
  */
@@ -57,6 +72,9 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadOnly)
 	int32 Point;
 
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	TArray<FPath> Paths;
+
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_SetPlayerName(const FString& Name);
 
@@ -74,6 +92,18 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void SR_DecreaseTrainCount(int32 Amount);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_AddTrack(ABaseTrack* Track);
+
+	UFUNCTION()
+	void AddNewPath(ECity LeftCity, ECity RightCity);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void SR_CheckCompletedRoutes();
+
+	UFUNCTION(Server, Reliable)
+	void SR_AddCompletedRoutesPoints();
 
 	/* OnRep FUNCTION */
 	UFUNCTION()

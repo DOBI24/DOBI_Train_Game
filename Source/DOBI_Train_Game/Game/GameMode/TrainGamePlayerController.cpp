@@ -135,6 +135,11 @@ bool ATrainGamePlayerController::CanInteract()
 	return false;
 }
 
+void ATrainGamePlayerController::CL_OutlineCompletedRouteCard_Implementation(int32 Index)
+{
+	BP_OutlineCompletedRouteCard(Index);
+}
+
 /* FUNCTIONS */
 
 TMap<int32, int32> ATrainGamePlayerController::GetPOINT_FROM_LENGTH()

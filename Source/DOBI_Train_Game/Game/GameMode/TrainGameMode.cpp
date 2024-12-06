@@ -24,7 +24,7 @@ ATrainGameMode::ATrainGameMode()
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<ATrainGamePlayerState> PlayerStateBPClass(TEXT("/Game/Game/BP_TrainGamePlayerState"));
+	static ConstructorHelpers::FClassFinder<APlayerState> PlayerStateBPClass(TEXT("/Game/Game/BP_TrainGamePlayerState"));
 	if (PlayerStateBPClass.Class != nullptr)
 	{
 		PlayerStateClass = PlayerStateBPClass.Class;

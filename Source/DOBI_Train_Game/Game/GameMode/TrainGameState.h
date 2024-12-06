@@ -15,7 +15,8 @@ enum class EGameState : uint8
 	DRAW_ROUTE_CARDS,
 	DRAW_WAGON_CARDS,
 	GAME,
-	NEXT_PLAYER
+	NEXT_PLAYER,
+	END
 };
 
 USTRUCT(BlueprintType)
@@ -31,9 +32,12 @@ struct FRouteCard {
 	UPROPERTY(BlueprintReadOnly)
 	int32 Point;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool Completed;
+
 	FRouteCard() {}
 
-	FRouteCard(ECity InFrom, ECity InTo, int32 InPoint) : From(InFrom), To(InTo), Point(InPoint) {}
+	FRouteCard(ECity InFrom, ECity InTo, int32 InPoint) : From(InFrom), To(InTo), Point(InPoint), Completed(false) {}
 };
 
 /**
@@ -106,9 +110,6 @@ public:
 /* DRAW CARDS */
 	UFUNCTION(Server, Reliable)
 	void SR_DrawRouteCards(ATrainGamePlayerState* PlayerState);
-
-	UFUNCTION(Server, Reliable)
-	void SR_DrawStartWagonCards(ATrainGamePlayerState* PlayerState);
 
 	UFUNCTION(Server, Reliable)
 	void SR_DrawWagonCard(int32 Amount, ATrainGamePlayerState* PlayerState);

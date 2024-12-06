@@ -69,6 +69,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool CanInteract();
 
+	UFUNCTION(Client, Reliable)
+	void CL_OutlineCompletedRouteCard(int32 Index);
+
 /* BLUEPRINT FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_TriggerHUDWidget_WagonCards(ECard_Color CardColor);
@@ -87,6 +90,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_TriggerShopWidget_AddWagonCard(ECard_Color CardColor);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_OutlineCompletedRouteCard(int32 Index);
 
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

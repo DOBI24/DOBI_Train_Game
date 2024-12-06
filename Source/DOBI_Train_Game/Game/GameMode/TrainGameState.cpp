@@ -73,14 +73,27 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 
 		StartTimerTick(ATrainGameMode::GAME_TIME);
 		ReadyQueue.Emplace(CurrentPlayer);
-
 		break;
 	case EGameState::NEXT_PLAYER:
 		Controller = Cast<ATrainGamePlayerController>(CurrentPlayer->GetPlayerController());
 		Controller->SetInputModeByServer(false);
-		StartTimerTick(3);
 
+		CurrentPlayer->SR_CheckCompletedRoutes();
+
+		if (CurrentPlayer->TrainCount <= 2) {
+			SR_SetGameState(EGameState::END);
+			break;
+		}
+
+		StartTimerTick(3);
 		BP_CheckWagonCardCount();
+		break;
+	case EGameState::END:
+		for (APlayerState* Player : PlayerArray) {
+			ATrainGamePlayerState* TrainGamePlayer = Cast<ATrainGamePlayerState>(Player);
+			TrainGamePlayer->SR_AddCompletedRoutesPoints();
+		}
+
 
 		break;
 	}
@@ -131,25 +144,18 @@ void ATrainGameState::SR_DrawRouteCards_Implementation(ATrainGamePlayerState* Pl
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
 		Amount++;
 	}
-}
 
-void ATrainGameState::SR_DrawStartWagonCards_Implementation(ATrainGamePlayerState* PlayerState)
-{
-	//Draw 4 wagon cards
-	for (int i = 0; i < 4; i++)
-	{
-		PlayerState->SR_AddWagonCard(WagonCards.Last());
-		WagonCards.RemoveAt(WagonCards.Num() - 1);
-		
-		//--------- DEBUG ---------
-		PlayerState->SR_AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE));
-		//--------- DEBUG ---------
-	}
-	OnRep_WagonCardsUpdate();
+	//--------- DEBUG ---------
+	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BUDAPEST, ECity::WIEN, 1));
+	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BERLIN, ECity::ESSEN, 2));
+	//--------- DEBUG ---------
 }
 
 void ATrainGameState::SR_DrawWagonCard_Implementation(int32 Amount, ATrainGamePlayerState* PlayerState)
 {
+	//--------- DEBUG ---------
+	PlayerState->SR_AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE));
+	//--------- DEBUG ---------
 	for (int32 i = 0; i < Amount; i++)
 	{
 		PlayerState->SR_AddWagonCard(WagonCards.Last());
