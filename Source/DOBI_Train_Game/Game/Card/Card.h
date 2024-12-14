@@ -51,8 +51,4 @@ protected:
 public:
 	UPROPERTY()
 	ECard_Color Color;
-
-	UFUNCTION()
-	bool CreateCardStaticMesh();
-
 };

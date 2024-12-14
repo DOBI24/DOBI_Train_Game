@@ -60,13 +60,13 @@ FVector ABaseTrack::GetTrackColorInVector()
 	switch (TrackColor)
 	{
 	case ETrack_Color::NO_COLOR:
-		TrackColorRGB = { 144.0f, 150.0f, 150.0f };
+		TrackColorRGB = { 70.0f, 70.0f, 70.0f };
 		break;
 	case ETrack_Color::PINK:
 		 TrackColorRGB = { 190.0f, 130.0f, 180.0f};
 		break;
 	case ETrack_Color::WHITE:
-		 TrackColorRGB = { 250.0f, 250.0f, 250.0f};
+		 TrackColorRGB = { 255.0f, 255.0f, 255.0f};
 		break;
 	case ETrack_Color::BLUE:
 		 TrackColorRGB = { 60.0f, 160.0f, 215.0f};
@@ -78,7 +78,7 @@ FVector ABaseTrack::GetTrackColorInVector()
 		 TrackColorRGB = { 215.0f, 135.0f, 45.0f};
 		break;
 	case ETrack_Color::BLACK:
-		 TrackColorRGB = { 60.0f, 60.0f, 60.0f};
+		 TrackColorRGB = { 10.0f, 10.0f, 10.0f};
 		break;
 	case ETrack_Color::RED:
 		 TrackColorRGB = { 185.0f, 30.0f, 40.0f};

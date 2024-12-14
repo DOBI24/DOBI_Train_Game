@@ -115,7 +115,6 @@ void ATrainGamePlayerController::CL_TriggerRouteWidgets_AddRouteCards_Implementa
 
 void ATrainGamePlayerController::SetInputModeByServer_Implementation(bool GameAndUI)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Mode: %s"), GameAndUI ? TEXT("GameAndUI") : TEXT("UIOnly"));
 	if (GameAndUI) {
 		SetInputMode(FInputModeGameAndUI());
 		return;

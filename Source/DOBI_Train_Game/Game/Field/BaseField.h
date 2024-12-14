@@ -23,13 +23,13 @@ protected:
 
 public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly)
-	ABaseTrack* Parent;
+	ABaseTrack* ParentTrack;
 
 	UPROPERTY()
 	UStaticMeshComponent* FieldComponent;
 
 	UFUNCTION()
-	void InitializeParent();
+	void InitializeParentTrack();
 
 	UPROPERTY(ReplicatedUsing = OnRep_ColorUpdate)
 	ETrack_Color StaticMeshColor;

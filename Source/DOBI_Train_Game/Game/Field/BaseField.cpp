@@ -14,7 +14,7 @@ ABaseField::ABaseField() : StaticMeshColor(ETrack_Color::DEFAULT_VALUE)
 	bReplicates = true;
 	bAlwaysRelevant = true;
 
-	Parent = nullptr;
+	ParentTrack = nullptr;
 	FieldComponent = nullptr;
 }
 
@@ -28,8 +28,8 @@ void ABaseField::BeginPlay()
 	SetOwner(GetWorld()->GetFirstPlayerController());
 
 	if (HasAuthority()) {
-		InitializeParent();
-		StaticMeshColor = Parent->TrackColor;
+		InitializeParentTrack();
+		StaticMeshColor = ParentTrack->TrackColor;
 		OnRep_ColorUpdate();
 	}
 }
@@ -45,13 +45,13 @@ void ABaseField::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ABaseField, Parent);
+	DOREPLIFETIME(ABaseField, ParentTrack);
 	DOREPLIFETIME(ABaseField, StaticMeshColor);
 }
 
-void ABaseField::InitializeParent()
+void ABaseField::InitializeParentTrack()
 {
-	Parent->AddFieldToFields(this);
+	ParentTrack->AddFieldToFields(this);
 }
 
 void ABaseField::HighlightOnClick()
@@ -69,8 +69,7 @@ void ABaseField::MC_ChangeFieldComponentStaticMeshToRail_Implementation(UStaticM
 void ABaseField::OnRep_ColorUpdate()
 {
 	if (!FieldComponent) return;
-
 	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(FieldComponent->GetMaterial(0), this);
-	DynMaterial->SetVectorParameterValue("Color", Parent->GetTrackColorInVector());
+	DynMaterial->SetVectorParameterValue("Color", ParentTrack->GetTrackColorInVector());
 	FieldComponent->SetMaterial(0, DynMaterial);
 }

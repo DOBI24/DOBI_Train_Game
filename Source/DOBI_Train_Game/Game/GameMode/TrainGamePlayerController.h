@@ -88,9 +88,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_DeselectTrack();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void BP_TriggerShopWidget_AddWagonCard(ECard_Color CardColor);
-
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OutlineCompletedRouteCard(int32 Index);
 

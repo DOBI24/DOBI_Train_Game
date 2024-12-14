@@ -131,7 +131,6 @@ void ATrainGamePlayerState::SR_CheckCompletedRoutes_Implementation()
 			if (Path.CityList.Contains(OwnedRouteCards[i].From) && Path.CityList.Contains(OwnedRouteCards[i].To)) {
 				OwnedRouteCards[i].Completed = true;
 				Controller->CL_OutlineCompletedRouteCard(i);
-				break;
 			}
 		}
 	}

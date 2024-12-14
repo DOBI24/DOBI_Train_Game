@@ -34,7 +34,6 @@ void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(ATrainGameState, RouteCards);
 	DOREPLIFETIME(ATrainGameState, LongRouteCards);
 	DOREPLIFETIME(ATrainGameState, WagonCards);
-	DOREPLIFETIME(ATrainGameState, ShopWagonCards);
 	DOREPLIFETIME(ATrainGameState, DiscardWagonCards);
 	DOREPLIFETIME(ATrainGameState, CurrentPlayer);
 	DOREPLIFETIME(ATrainGameState, CurrentPlayerIndex);
@@ -57,7 +56,6 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		ReadyQueue = PlayerArray;
 		break;
 	case EGameState::DRAW_WAGON_CARDS:
-		//SR_FillShopWagonCards();
 		CurrentPlayerIndex = -1;
 		StartTimerTick(3);
 		break;
@@ -144,18 +142,10 @@ void ATrainGameState::SR_DrawRouteCards_Implementation(ATrainGamePlayerState* Pl
 		RouteCards.RemoveAt(RouteCards.Num() - 1);
 		Amount++;
 	}
-
-	//--------- DEBUG ---------
-	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BUDAPEST, ECity::WIEN, 1));
-	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BERLIN, ECity::ESSEN, 2));
-	//--------- DEBUG ---------
 }
 
 void ATrainGameState::SR_DrawWagonCard_Implementation(int32 Amount, ATrainGamePlayerState* PlayerState)
 {
-	//--------- DEBUG ---------
-	PlayerState->SR_AddWagonCard(FWagonCard(ECard_Color::LOCOMOTIVE));
-	//--------- DEBUG ---------
 	for (int32 i = 0; i < Amount; i++)
 	{
 		PlayerState->SR_AddWagonCard(WagonCards.Last());
@@ -279,26 +269,6 @@ void ATrainGameState::SR_AddRouteCard_Implementation(FRouteCard RouteCard)
 	RouteCards.EmplaceAt(0, RouteCard);
 }
 
-/* SHOP WAGON CARDS */
-void ATrainGameState::SR_FillShopWagonCards_Implementation()
-{
-	while(ShopWagonCards.Num() != 5) {
-		ShopWagonCards.Emplace(WagonCards.Last());
-		MC_FillShopWagonCards(WagonCards.Last());
-		WagonCards.RemoveAt(WagonCards.Num() - 1);
-	}
-}
-
-void ATrainGameState::MC_FillShopWagonCards_Implementation(FWagonCard InputCard)
-{
-	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
-
-	if (Controller)
-	{
-		Controller->BP_TriggerShopWidget_AddWagonCard(InputCard.Color);
-	}
-}
-
 /* OnRep functions */
 void ATrainGameState::OnRep_WagonCardsUpdate()
 {
@@ -316,9 +286,4 @@ void ATrainGameState::OnRep_CurrentGameStateUpdate()
 	{
 		Controller->CheckCurrentGameState(CurrentPlayer);
 	}
-}
-
-void ATrainGameState::OnRep_ShopWagonCardsUpdate()
-{
-
 }
