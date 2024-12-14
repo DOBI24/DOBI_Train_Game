@@ -72,6 +72,16 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_DiscardWagonCardsUpdate, BlueprintReadOnly)
 	TArray<FWagonCard> DiscardWagonCards;
 
+/* WINNER PLAYER NAME */
+	UPROPERTY(Replicated, BlueprintReadOnly)
+	FString WinnerName;
+
+	UFUNCTION(Server, Reliable)
+	void SR_SetWinnerName();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MC_SetWinnerName(const FString& Name);
+
 /* GAMESTATE */
 	UPROPERTY(ReplicatedUsing = OnRep_CurrentGameStateUpdate, BlueprintReadOnly)
 	EGameState CurrentGameState;

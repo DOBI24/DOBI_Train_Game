@@ -91,6 +91,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_OutlineCompletedRouteCard(int32 Index);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_ChangeWinnerName(const FString& Name);
+
 /* UI FUNCTIONS */
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SwitchScene(TSubclassOf<UUserWidget> WidgetClass);

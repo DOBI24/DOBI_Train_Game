@@ -175,5 +175,8 @@ void ATrainGamePlayerController::CheckCurrentGameState(ATrainGamePlayerState* Cu
 		BP_DeselectTrack();
 		ToggleDrawButtonEnable(false);
 		break;
+	case EGameState::END:
+		SwitchScene(WidgetReferences["EndGame"]);
+		break;
 	}
 }

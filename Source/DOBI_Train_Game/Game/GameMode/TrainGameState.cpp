@@ -26,6 +26,30 @@ void ATrainGameState::BeginPlay()
 	}
 }
 
+void ATrainGameState::MC_SetWinnerName_Implementation(const FString& Name)
+{
+	ATrainGamePlayerController* Controller = Cast<ATrainGamePlayerController>(GetWorld()->GetFirstPlayerController());
+	Controller->BP_ChangeWinnerName(Name);
+}
+
+void ATrainGameState::SR_SetWinnerName_Implementation()
+{
+	ATrainGamePlayerState* WinnerPlayer = nullptr;
+	int32 MaxPoints = -1;
+
+	for (APlayerState* Player : PlayerArray) {
+		ATrainGamePlayerState* TrainGamePlayer = Cast<ATrainGamePlayerState>(Player);
+		if (TrainGamePlayer->Point > MaxPoints) {
+			WinnerPlayer = TrainGamePlayer;
+			MaxPoints = TrainGamePlayer->Point;
+		}
+	}
+
+	if(!WinnerPlayer) return;
+
+	MC_SetWinnerName(WinnerPlayer->GetPlayerName());
+}
+
 void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -37,6 +61,7 @@ void ATrainGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(ATrainGameState, DiscardWagonCards);
 	DOREPLIFETIME(ATrainGameState, CurrentPlayer);
 	DOREPLIFETIME(ATrainGameState, CurrentPlayerIndex);
+	DOREPLIFETIME(ATrainGameState, WinnerName);
 }
 
 // Game state controller
@@ -79,8 +104,11 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 		CurrentPlayer->SR_CheckCompletedRoutes();
 
 		if (CurrentPlayer->TrainCount <= 2) {
+			CurrentGameState = NewGameState;
+			OnRep_CurrentGameStateUpdate();
+
 			SR_SetGameState(EGameState::END);
-			break;
+			return;
 		}
 
 		StartTimerTick(3);
@@ -91,8 +119,7 @@ void ATrainGameState::SR_SetGameState_Implementation(EGameState NewGameState)
 			ATrainGamePlayerState* TrainGamePlayer = Cast<ATrainGamePlayerState>(Player);
 			TrainGamePlayer->SR_AddCompletedRoutesPoints();
 		}
-
-
+		SR_SetWinnerName();
 		break;
 	}
 
@@ -136,6 +163,8 @@ void ATrainGameState::SR_DrawRouteCards_Implementation(ATrainGamePlayerState* Pl
 		PlayerState->SR_AddRouteCard(LongRouteCards.Last());
 		LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
 	}
+	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BUDAPEST, ECity::WIEN, 1000));
+
 
 	while (Amount < 3 && RouteCards.Num() != 0) {
 		PlayerState->SR_AddRouteCard(RouteCards.Last());
