@@ -16,7 +16,7 @@ class DOBI_TRAIN_GAME_API ATrainGameMode : public AGameMode
 
 public:
 	/* PLAYER CONSTANTS */
-	inline static const int32 MAX_TRAIN_COUNT = 6;
+	inline static const int32 MAX_TRAIN_COUNT = 45;
 	inline static const int32 MAX_STATION_COUNT = 3;
 
 	/* TIMER CONSTANTS */

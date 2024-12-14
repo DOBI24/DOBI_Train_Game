@@ -163,8 +163,6 @@ void ATrainGameState::SR_DrawRouteCards_Implementation(ATrainGamePlayerState* Pl
 		PlayerState->SR_AddRouteCard(LongRouteCards.Last());
 		LongRouteCards.RemoveAt(LongRouteCards.Num() - 1);
 	}
-	PlayerState->SR_AddRouteCard(FRouteCard(ECity::BUDAPEST, ECity::WIEN, 1000));
-
 
 	while (Amount < 3 && RouteCards.Num() != 0) {
 		PlayerState->SR_AddRouteCard(RouteCards.Last());
