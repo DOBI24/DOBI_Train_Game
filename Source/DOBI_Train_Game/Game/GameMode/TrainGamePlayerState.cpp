@@ -38,7 +38,6 @@ void ATrainGamePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(ATrainGamePlayerState, OwnedRouteCards);
 	DOREPLIFETIME(ATrainGamePlayerState, OwnedWagonCards);
 	DOREPLIFETIME(ATrainGamePlayerState, OwnedTracks);
-	DOREPLIFETIME(ATrainGamePlayerState, PlayerColor);
 	DOREPLIFETIME(ATrainGamePlayerState, TrainCount);
 	DOREPLIFETIME(ATrainGamePlayerState, StationCount);
 	DOREPLIFETIME(ATrainGamePlayerState, Point);

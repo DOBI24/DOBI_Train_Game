@@ -51,9 +51,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UPROPERTY(Replicated, BlueprintReadOnly)
-	EPlayer_Color PlayerColor;
-
 	UPROPERTY(ReplicatedUsing = OnRep_PlayerStatUpdate, BlueprintReadWrite)
 	int32 TrainCount;
 

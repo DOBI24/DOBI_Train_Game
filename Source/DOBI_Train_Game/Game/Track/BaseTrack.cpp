@@ -7,7 +7,7 @@
 #include "../GameMode/TrainGamePlayerController.h"
 
 // Sets default values
-ABaseTrack::ABaseTrack() : HasTrackOwner(false), FieldCount(0), FerryCount(0)
+ABaseTrack::ABaseTrack() : HasTrackOwner(false), FerryCount(0), FieldCount(0)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
